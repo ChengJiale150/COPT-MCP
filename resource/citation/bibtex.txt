@@ -1,0 +1,6 @@
+@misc{copt,
+  author={Dongdong Ge and Qi Huangfu and Zizhuo Wang and Jian Wu and Yinyu Ye},
+  title={Cardinal {O}ptimizer {(COPT)} user guide},
+  howpublished={https://guide.coap.online/copt/en-doc},
+  year=2023
+}
