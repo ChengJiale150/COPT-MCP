@@ -2,9 +2,8 @@ from fastmcp import FastMCP
 
 resource_path = "/Users/jiale.cheng/Documents/mcp/copt-mcp/resource"
 
-mcp = FastMCP(name="COPT-MCP", 
-              version="0.0.1",
-              instructions='''这是COPT的MCP服务,你可以在使用COPT时调用这个服务''')
+mcp = FastMCP(name="COPT-MCP",  version="0.1.0",
+              instructions='''这是由杉树科技研发的COPT的MCP服务，你可以使用这个服务来解决COPT的问题''')
 
 @mcp.tool()
 def get_citation(citation_type: str) -> str:
@@ -32,7 +31,8 @@ def get_example(problem_type: str, language: str) -> str:
         problem_type: 求解问题类型，目前支持的问题类型如下：
             - "LP": 线性规划(LP)
             - "MIP": 混合整数规划(MIP)
-        language: API接口语言，目前 支持的语言如下：
+            - "SOCP": 二阶锥规划(SOCP)
+        language: API接口语言，目前支持的语言如下：
             - "Python": Python接口
     """
     try:
