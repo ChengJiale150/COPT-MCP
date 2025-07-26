@@ -1,0 +1,74 @@
+[
+    {
+        "rowid": 0,
+        "name": "EnvrConfig()",
+        "description": "摘要：EnvrConfig()。描述：EnvrConfig 类的构造函数，该方法将创建并返回一个EnvrConfig 类对象。参量：无。",
+        "code": "# 创建杉数求解器客户端配置\nenvconfig = EnvrConfig()"
+    },
+    {
+        "rowid": 1,
+        "name": "EnvrConfig.set()",
+        "description": "摘要：set(name, value)。描述：设置客户端配置参数。参量：name为客户端配置参数名，可取值参考客户端配置参数；value为客户端配置参数值。",
+        "code": "# 设置客户端配置参数\nenvconfig.set(COPT.CLIENT_WAITTIME, 600)\nenvconfig.set(COPT.CLIENT_CLUSTER, \"127.0.0.1\")\n# 设置关闭创建COPT求解环境时输出的banner信息(如版本号等)\nenvconfig.set(\"nobanner\", \"1\")"
+    },
+    {
+        "rowid": 2,
+        "name": "Envr()",
+        "description": "摘要：Envr(arg=None)。描述：Envr 类的构造函数，该方法将创建并返回一个Envr 类对象。参量：arg为授权文件的路径或客户端配置，可选参数，默认为None。",
+        "code": "# 创建杉数求解器求解环境\nenv = Envr()"
+    },
+    {
+        "rowid": 3,
+        "name": "Envr.createModel()",
+        "description": "摘要：createModel(name=\"\")。描述：创建优化模型，返回一个Model 类对象。参量：name为待创建优化模型的名称，可选参数，默认为\"\"。",
+        "code": "# 创建杉数求解器求解模型\nmodel = env.createModel(\"coptprob\")"
+    },
+    {
+        "rowid": 4,
+        "name": "Envr.close()",
+        "description": "摘要：close()。描述：关闭与远程服务器的连接。参量：无。",
+        "code": "关闭与远程服务器的连接\nenv.close()"
+    },
+    {
+        "rowid": 5,
+        "name": "Model.addVar()",
+        "description": "摘要：addVar(lb=0.0, ub=COPT.INFINITY, obj=0.0, vtype=COPT.CONTINUOUS, name=\"\", column=None)。描述：添加一个变量到模型中，并返回创建的一个Var 类对象。参量：lb为变量的下界，可选参量，默认为0.0；ub为变量的上界，可选参量，默认为COPT.INFINITY；obj为变量的目标函数系数，可选参量，默认为0.0；vtype为变量的类型，可选参量，默认为COPT.CONTINUOUS，可取值详见变量类型；name为变量的名字，可选参量，默认为\"\"，由求解器内部自动生成；column为变量对应的列，可选参量，默认为None。",
+        "code": "# 添加一个连续变量\nx = m.addVar()\n# 添加一个二进制变量\ny = m.addVar(vtype=COPT.BINARY)\n# 添加一个整数变量,下界为-1.0, 上界为1.0,目标函数系数为1.0,变量名为\"z\"\nz = m.addVar(-1.0, 1.0, 1.0, COPT.INTEGER, \"z\")"
+    },
+    {
+        "rowid": 6,
+        "name": "Model.addVars()",
+        "description": "摘要：addVars(*indices, lb=0.0, ub=COPT.INFINITY, obj=0.0, vtype=COPT.CONTINUOUS, nameprefix=\"C\")。描述：添加一组变量到模型中，并返回一个tupledict 类对象，其键为变量的下标，值为相应的Var 类对象。参量：*indices为变量的下标；lb为变量的下界，可选参量，默认为0.0；ub为变量的上界，可选参量，默认为COPT.INFINITY；obj为变量的目标函数系数，可选参量，默认为0.0；vtype为变量的类型，可选参量，默认为COPT.CONTINUOUS，可取值详见变量类型；nameprefix为变量的名称前缀，可选参量，默认为\"C\"，其实际名称结合变量的下标自动生成。",
+        "code": "# 添加三维整数变量x,共计6个变量\nx = m.addVars(1, 2, 3, vtype=COPT.INTEGER)\n# 添加2个连续变量y,其下标由tl中的元素指定,变量名前缀为\"tl\"\ntl = tuplelist([(0, 1), (1, 2)])\ny = m.addVars(tl, nameprefix=\"tl\")"
+    },
+    {
+        "rowid": 7,
+        "name": "Model.addMVar()",
+        "description": "摘要：addMVar(shape, lb=0.0, ub=COPT.INFINITY, obj=0.0, vtype=COPT.CONTINUOUS, nameprefix=\"\")。描述：添加MVar 类对象到模型中。它在矩阵建模中使用，可以像NumPy 里多维数组一样运算，其形状和维度都有类似定义。参量：shape取值为整数，或者整数元组，表示MVar 类对象的形状；lb为变量的下界，可选参量，默认为0.0；ub为变量的上界，可选参量，默认为COPT.INFINITY；obj为变量的目标函数系数，可选参量，默认为0.0；vtype为变量的类型，可选参量，默认为COPT.CONTINUOUS，可取值详见变量类型；nameprefix为变量的名称前缀，可选参量，默认为\"\"，其实际名称结合变量的下标自动生成。返回值：返回一个MVar 类对象。",
+        "code": "model.addMVar((2, 3), lb=0.0, nameprefix=\"mx\")"
+    },
+    {
+        "rowid": 8,
+        "name": "Model.addConstr()",
+        "description": "摘要：addConstr(lhs, sense=None, rhs=None, name=\"\")。描述：添加一个线性约束到模型中，返回Constraint 类对象或MConstr 类对象；添加一个半定约束到模型中，返回PsdConstraint 类对象或MPsdConstr 类对象；添加一个Indicator 约束到模型中，返回GenConstr 类对象；添加LMI 约束到模型中，返回LmiConstraint 类对象。若添加线性约束，则参数lhs 可取值为Var 类对象、LinExpr 类、ConstrBuilder 类对象或MConstrBuilder 类对象。若添加半定约束，则参数lhs 可取值为PsdExpr 类对象、PsdConstrBuilder 类对象或MPsdConstrBuilder 类对象。若添加Indicator 约束，则参数lhs 为GenConstrBuilder 类对象，并忽略其它参数；若添加LMI 约束，则参数lhs 为LmiExpr 类对象。参量：lhs为线性约束的左端项或约束构建器；sense为线性约束的类型，可选参量，默认为None，可取值详见约束类型；rhs为线性约束的右端项，可选参量，默认为None，可取值为常数、Var 类对象或LinExpr 类对象；name为线性约束的名称，可选参量，默认为\"\"，由求解器内部自动生成。",
+        "code": "# 添加一个线性等式约束:x + y == 2\naddConstr(x + y, COPT.EQUAL, 2)\n添加一个线性大于等于约束:x + 2*y >= 3\naddConstr(x + 2*y >= 3.0)\n# 添加一个Indicator约束\nm.addConstr((x == 1) >> (2*y + 3*z <= 4))"
+    },
+    {
+        "rowid": 9,
+        "name": "Model.addBoundConstr()",
+        "description": "摘要：addBoundConstr(expr, lb=-COPT.INFINITY, ub=COPT.INFINITY, name=\"\")。描述：添加一个带上下界的线性约束到模型中，并返回添加的Constraint 类对象。参量：expr为线性约束的表达式，可取值为Var 类对象或LinExpr 类对象；lb为线性约束的下界，可选参量，默认为-COPT.INFINITY；ub为线性约束的上界，可选参量，默认为COPT.INFINITY；name为线性约束的名称，可选参量，默认为\"\"，由求解器内部自动生成。",
+        "code": "# 添加线性双边约束:-1 <= x + y <= 1\n.addBoundConstr(x + y, -1.0, 1.0)"
+    },
+    {
+        "rowid": 10,
+        "name": "Model.addConstrs()",
+        "description": "摘要：addConstrs(generator, nameprefix=\"R\")。描述：添加一组线性约束、半定约束，或一组Indicator 约束到模型中。若参数generator 为整数，则返回一个ConstrArray 类对象，其元素为generator 个空Constraint 类对象，用户需要进一步指定这些约束的具体信息；若参数generator 为表达式生成器，则返回一个tupledict 类对象，其键为线性约束的下标，值为相应的Constraint 类对象，每个迭代生成一个Constraint 类对象；若参数 generator 为矩阵表达式生成器，则返回一个MConstr 类 对象 或MPsdConstr 类对象。若参数generator 为Indicator 约束表达式生成器，则返回一个GenConstrArray 类对象。参量：generator为整数或(矩阵)表达式生成器，或Indicator 约束表达式生成器；nameprefix为线性约束或Indicator 约束的名称前缀，可选参量，默认为\"R\"，其实际名称结合约束的下标自动生成。",
+        "code": "# 添加10个线性约束,每个约束形如:x[0] + y[0] >= 2.0\nm.addConstrs(x[i] + y[i] >= 2.0 for i in range(10))"
+    },
+    {
+        "rowid": 11,
+        "name": "Model.addMConstr()",
+        "description": "摘要：addMConstr(A, x, sense, b, nameprefix=\"\")。描述：通过矩阵建模的方式，添加一组线性约束到模型中。如果这里sense 取值为COPT.LESS_EQUAL，添加的约束为A x<=b。更方便的是通过矩阵乘法生成MLinExpr 类对象，再使用重载的比较运算符生成MConstrBuilder 类对象，可以作为Model.addConstrs() 的输入生成一组线性约束。参量：A是一个二维的NumPy 矩阵，或者SciPy 列压缩矩阵( csc_matrix ) 或行压缩矩阵( csr_matrix )；x为线性项对应的变量，可以是MVar 类对象，VarArray 类对象、列表、字典或tupledict 类对象；如果为空，但参数c 不空，则取模型中所有的变量；sense为约束的类型，可取值参考约束类型；b为约束右边值，通常是浮点数，也可以是一组数，或者NumPy 的一维数组；nameprefix为约束名前缀。返回值：返回一个MConstr 类对象。",
+        "code": "A = np.full((2, 3), 1)\nmx = model.addMVar(3, nameprefix=\"mx\")\nmc = model.addMConstr(A, mx, 'L', 1.0, nameprefix=\"mc\")"
+    }
+]

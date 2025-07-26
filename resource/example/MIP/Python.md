@@ -5,18 +5,22 @@
 这是一个经典的0-1背包问题。假设有一个背包，其最大承重为15个单位。现有5个物品，每个物品有各自的重量和价值。目标是在不超过背包承重的前提下，选择装入哪些物品，使得装入物品的总价值最大。
 
 **决策变量：**
-*   $x_i$ 为二进制变量，如果选择物品 $i$，则 $x_i=1$，否则 $x_i=0$。
+
+* $x_i$ 为二进制变量，如果选择物品 $i$，则 $x_i=1$，否则 $x_i=0$。
 
 **目标函数：**
 最大化 $Z = 10x_1 + 15x_2 + 8x_3 + 12x_4 + 5x_5$
 
 **约束条件：**
-1.  $5x_1 + 8x_2 + 3x_3 + 6x_4 + 4x_5 \le 15$
+
+1. $5x_1 + 8x_2 + 3x_3 + 6x_4 + 4x_5 \le 15$
 
 **变量类型：**
-*   $x_i \in \{0, 1\}, \quad \forall i \in \{1, 2, 3, 4, 5\}$
+
+* $x_i \in \{0, 1\}, \quad \forall i \in \{1, 2, 3, 4, 5\}$
 
 ## 求解代码
+
 ```python
 import coptpy as cp
 from coptpy import COPT
@@ -139,39 +143,46 @@ finally:
 
 **目标:**
 公司需要决定：
-1.  开设哪些仓库。
-2.  从每个开设的仓库向各个客户运送多少产品。
-目标是最小化总成本，总成本包括开设仓库的固定成本和运输产品的可变成本。
+
+1. 开设哪些仓库。
+2. 从每个开设的仓库向各个客户运送多少产品。
+   目标是最小化总成本，总成本包括开设仓库的固定成本和运输产品的可变成本。
 
 **索引:**
-*   $i \in I$: 潜在的仓库（设施）集合。
-*   $j \in J$: 客户集合。
+
+* $i \in I$: 潜在的仓库（设施）集合。
+* $j \in J$: 客户集合。
 
 **参数:**
-*   $f_i$: 开设仓库 $i$ 的固定成本。
-*   $M_i$: 仓库 $i$ 的最大产能。
-*   $d_j$: 客户 $j$ 的需求量。
-*   $c_{ij}$: 从仓库 $i$ 向客户 $j$ 运输单位产品的成本。
+
+* $f_i$: 开设仓库 $i$ 的固定成本。
+* $M_i$: 仓库 $i$ 的最大产能。
+* $d_j$: 客户 $j$ 的需求量。
+* $c_{ij}$: 从仓库 $i$ 向客户 $j$ 运输单位产品的成本。
 
 **决策变量:**
-*   $y_i$: 二进制变量。如果决定开设仓库 $i$，则 $y_i = 1$，否则 $y_i = 0$。
-*   $x_{ij}$: 连续变量。从仓库 $i$ 向客户 $j$ 运输的产品数量。
+
+* $y_i$: 二进制变量。如果决定开设仓库 $i$，则 $y_i = 1$，否则 $y_i = 0$。
+* $x_{ij}$: 连续变量。从仓库 $i$ 向客户 $j$ 运输的产品数量。
 
 **目标函数：**
 最小化总成本 $Z = \sum_{i \in I} f_i y_i + \sum_{i \in I} \sum_{j \in J} c_{ij} x_{ij}$
 
 **约束条件：**
-1.  **需求满足约束:** 每个客户的需求必须被完全满足。
-    $\sum_{i \in I} x_{ij} = d_j, \quad \forall j \in J$
-2.  **产能与逻辑关联约束:** 从一个仓库发出的总产品量不能超过该仓库的产能，并且只有当该仓库被开设时，才能从中发货。
-    $\sum_{j \in J} x_{ij} \le M_i \cdot y_i, \quad \forall i \in I$
-    *(这个约束巧妙地将二进制变量 $y_i$ 和连续变量 $x_{ij}$ 关联起来。如果 $y_i=0$，则右侧为0，所有从仓库 $i$ 出发的 $x_{ij}$ 都必须为0。如果 $y_i=1$，则该约束变为标准的产能约束。)*
+
+1. **需求满足约束:** 每个客户的需求必须被完全满足。
+   $\sum_{i \in I} x_{ij} = d_j, \quad \forall j \in J$
+2. **产能与逻辑关联约束:** 从一个仓库发出的总产品量不能超过该仓库的产能，并且只有当该仓库被开设时，才能从中发货。
+   $\sum_{j \in J} x_{ij} \le M_i \cdot y_i, \quad \forall i \in I$
+   *(这个约束巧妙地将二进制变量 $y_i$ 和连续变量 $x_{ij}$ 关联起来。如果 $y_i=0$，则右侧为0，所有从仓库 $i$ 出发的 $x_{ij}$ 都必须为0。如果 $y_i=1$，则该约束变为标准的产能约束。)*
 
 **变量范围（边界约束）：**
-*   $x_{ij} \ge 0, \quad \forall i \in I, j \in J$
-*   $y_i \in \{0, 1\}, \quad \forall i \in I$
+
+* $x_{ij} \ge 0, \quad \forall i \in I, j \in J$
+* $y_i \in \{0, 1\}, \quad \forall i \in I$
 
 # 求解代码
+
 ```python
 import coptpy as cp
 from coptpy import COPT
@@ -198,7 +209,7 @@ try:
 
     # 对于运输成本，创建一个以 (facility, customer) 元组为键的字典。
     shipping_costs = shipping_costs_df.set_index(['Facility_ID', 'Customer_ID'])['Cost'].to_dict()
-    
+
     # 创建所有可能的运输路径
     routes = list(shipping_costs.keys())
 
@@ -234,7 +245,7 @@ try:
     # 使用 cp.quicksum() 高效构建目标函数表达式。
     total_fixed_cost = cp.quicksum(fixed_costs[i] * y[i] for i in facilities)
     total_shipping_cost = cp.quicksum(shipping_costs[i, j] * x[i, j] for i, j in routes)
-    
+
     model.setObjective(total_fixed_cost + total_shipping_cost, sense=COPT.MINIMIZE)
 
     # 7. 求解模型
@@ -253,7 +264,7 @@ try:
             if y[i].x > 0.5: # 使用0.5作为阈值判断二进制变量是否为1
                 opened_facilities.append(i)
                 print(f"    - {i} (固定成本: {fixed_costs[i]:,})")
-        
+
         if not opened_facilities:
             print("    - 无")
 
