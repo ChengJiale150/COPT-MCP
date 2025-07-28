@@ -4,12 +4,12 @@
 
 # COPT-MCP 🚀
 
-<strong>基于杉树科技COPT求解器的MCP服务，为AI助手提供强大的数学优化求解能力</strong>
+<strong>基于杉树科技开发的COPT求解器的MCP服务，提供专门为大语言模型设计的文档和示例</strong>
 
-*由 [杉树科技](https://www.coap.online/) 开发*
+*由 [ChengJiale150](https://github.com/ChengJiale150) 开发*
 
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.coap.online/copt)
+[![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -22,75 +22,73 @@
 ## 📖 目录
 
 - [项目简介](#-项目简介)
-- [功能特性](#-功能特性)
+- [功能一览](#-功能一览)
 - [安装与使用](#-安装与使用)
-- [MCP工具介绍](#-mcp工具介绍)
-  - [获取引用格式](#获取引用格式)
-  - [获取参考示例](#获取参考示例)
-- [使用示例](#-使用示例)
-- [支持的问题类型](#-支持的问题类型)
+- [详细介绍](#-详细介绍)
 - [贡献指南](#-贡献指南)
-- [许可证](#-许可证)
+- [致谢](#-致谢)
+- [联系我们](#-联系我们)
 
 ## 🎯 项目简介
 
-COPT-MCP 是一个基于 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) 的服务，为AI助手提供杉树科技 [COPT (Cardinal Optimizer)](https://www.coap.online/copt) 求解器的访问能力。COPT是一款高性能的数学优化求解器，支持线性规划(LP)、混合整数规划(MIP)、二阶锥规划(SOCP)等多种优化问题。
+COPT-MCP 是一个基于 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) 的服务，为支持MCP的客户端提供COPT求解器的相关接口的详细文档与示例，旨在实现COPT求解器的文档AI化适配，降低模型幻觉，提高大模型使用COPT求解器的准确性。
 
-通过COPT-MCP服务，AI助手可以：
+### 为什么需要COPT-MCP
 
-- 获取COPT的学术引用格式
-- 查看各种优化问题的参考示例代码
-- 为用户提供专业的数学优化解决方案
+COPT求解器是一款针对大规模优化问题的高效数学规划求解器，支持线多种优化问题，是解决复杂运筹规划问题的不二之选。然而，COPT求解器的相关信息在公开场合较少，导致大模型在调用COPT求解器时，容易出现幻觉，影响使用体验。直接输入COPT的官方文档，也会因为文档过长，远超模型上下文长度上限，而且过多的无关文档内容也会影响模型理解，导致上下文迷失。
 
-## ✨ 功能特性
+COPT-MCP旨在为大模型提供COPT求解器的相关接口的最小可行文档与示例，通过精心组织与选取文档内容，实现COPT求解器的文档AI化适配，输出最小必要信息，降低模型幻觉，提高大模型使用COPT求解器相关接口的准确性。
 
-- 🔧 **多问题类型支持**: 支持LP、MIP、SOCP等主流优化问题
-- 📚 **丰富的示例库**: 提供详细的Python代码示例和数学建模说明
+### COPT-MCP的优势
+
+- 🔧 **多类型支持**: 支持多种规划问题与编程语言
+- 📚 **丰富的示例库**: 提供详细的代码示例和API说明
 - 📖 **学术引用支持**: 提供Word和BibTeX格式的引用模板
-- 🚀 **高性能求解**: 基于COPT求解器的强大算法能力
-- 🔌 **MCP协议**: 标准化的AI助手集成接口
+- 🔌 **MCP协议**: 标准化的AI助手集成接口，支持多种大模型与客户端
+- 🚀 **轻量化部署**: 无需安装额外软件，仅需Python虚拟环境
 - 📝 **中文文档**: 完整的中文文档和示例说明
+
+## ✨ 功能一览
+
+| 类型   | 名称            | 描述                     |
+|:----:|:-------------:|:----------------------:|
+| Tool | get_citation  | 获取COPT的引用格式            |
+| Tool | get_reference | 获取COPT的指定语言接口对应问题的参考示例 |
+| Tool | get_api_doc   | 根据查询指令召回最相似的API文档      |
 
 ## 🛠️ 安装与使用
 
 ### 环境要求
 
 - Python 3.11+
-- COPT 7.2.9+
 - FastMCP 2.10.6+
+- uv
 
 ### 安装步骤
 
 1. **克隆项目**
    
-   ```bash
-   git clone https://github.com/your-username/COPT-MCP.git
-   cd COPT-MCP
-   ```
+```bash
+git clone https://github.com/ChengJiale150/COPT-MCP.git
+cd COPT-MCP
+```
 
 2. **安装依赖**
    
-   ```bash
-   # 使用uv (推荐)
-   uv sync
-   ```
-
-# 或使用pip
-
-pip install -r requirements.txt
-
-```
-3. **配置COPT许可证**
-确保您已获得COPT求解器的有效许可证。详情请访问 [COPT官网](https://www.coap.online/copt)。
-
-4. **运行MCP服务**
 ```bash
-python server.py
+pip install uv
+uv sync
 ```
 
-### 在AI助手中集成
+3. **运行MCP服务**
 
-在支持MCP的AI助手配置文件中添加：
+```bash
+uv run server.py
+```
+
+### 在客户端中集成
+
+在支持MCP的客户端配置文件中添加：
 
 ```json
 {
@@ -106,7 +104,7 @@ python server.py
 }
 ```
 
-## 🔧 MCP工具介绍
+## 🔧 详细介绍
 
 COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化求解服务。
 
@@ -242,10 +240,6 @@ print(mip_example)
 - 🧪 测试用例添加
 - 🌍 国际化支持
 
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
-
 ## 🔗 相关链接
 
 - [COPT官网](https://www.coap.online/copt)
@@ -265,6 +259,6 @@ print(mip_example)
 
 **如果这个项目对您有帮助，请给我们一个 ⭐️**
 
-Made with ❤️ by [杉树科技](https://www.coap.online/)
+Made with ❤️ by [ChengJiale150](https://github.com/ChengJiale150)
 
 </div>

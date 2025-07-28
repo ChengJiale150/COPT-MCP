@@ -6,8 +6,13 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 resource_path = os.path.join(current_dir, "resource")
 api_key = "sk-wqdksytnrhdarewmhqtxkrribdztclmzukyorzxxnncqnlcz"
 
-mcp = FastMCP(name="COPT-MCP",  version="0.1.0",
-              instructions='''这是由杉树科技研发的COPT的MCP服务，你可以使用这个服务来解决COPT的问题''')
+mcp = FastMCP(name="COPT-MCP",  version="0.2.0",
+              instructions='''这是由杉树科技研发的COPT的MCP服务，你可以使用这个服务来解决COPT的问题''',
+              dependencies=[
+                  "fastmcp",
+                  "sqlite_vec",
+                  "requests"
+              ])
 
 @mcp.tool()
 def get_citation(citation_type: str) -> str:
