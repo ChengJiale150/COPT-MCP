@@ -1,74 +1,1232 @@
 [
     {
-        "rowid": 0,
+        "rowid": 20101,
         "name": "EnvrConfig()",
         "description": "摘要：EnvrConfig()。描述：EnvrConfig 类的构造函数，该方法将创建并返回一个EnvrConfig 类对象。参量：无。",
         "code": "# 创建杉数求解器客户端配置\nenvconfig = EnvrConfig()"
     },
     {
-        "rowid": 1,
+        "rowid": 20102,
         "name": "EnvrConfig.set()",
         "description": "摘要：set(name, value)。描述：设置客户端配置参数。参量：name为客户端配置参数名，可取值参考客户端配置参数；value为客户端配置参数值。",
         "code": "# 设置客户端配置参数\nenvconfig.set(COPT.CLIENT_WAITTIME, 600)\nenvconfig.set(COPT.CLIENT_CLUSTER, \"127.0.0.1\")\n# 设置关闭创建COPT求解环境时输出的banner信息(如版本号等)\nenvconfig.set(\"nobanner\", \"1\")"
     },
     {
-        "rowid": 2,
+        "rowid": 20201,
         "name": "Envr()",
         "description": "摘要：Envr(arg=None)。描述：Envr 类的构造函数，该方法将创建并返回一个Envr 类对象。参量：arg为授权文件的路径或客户端配置，可选参数，默认为None。",
         "code": "# 创建杉数求解器求解环境\nenv = Envr()"
     },
     {
-        "rowid": 3,
+        "rowid": 20202,
         "name": "Envr.createModel()",
         "description": "摘要：createModel(name=\"\")。描述：创建优化模型，返回一个Model 类对象。参量：name为待创建优化模型的名称，可选参数，默认为\"\"。",
         "code": "# 创建杉数求解器求解模型\nmodel = env.createModel(\"coptprob\")"
     },
     {
-        "rowid": 4,
+        "rowid": 20203,
         "name": "Envr.close()",
         "description": "摘要：close()。描述：关闭与远程服务器的连接。参量：无。",
         "code": "关闭与远程服务器的连接\nenv.close()"
     },
     {
-        "rowid": 5,
+        "rowid": 20301,
         "name": "Model.addVar()",
         "description": "摘要：addVar(lb=0.0, ub=COPT.INFINITY, obj=0.0, vtype=COPT.CONTINUOUS, name=\"\", column=None)。描述：添加一个变量到模型中，并返回创建的一个Var 类对象。参量：lb为变量的下界，可选参量，默认为0.0；ub为变量的上界，可选参量，默认为COPT.INFINITY；obj为变量的目标函数系数，可选参量，默认为0.0；vtype为变量的类型，可选参量，默认为COPT.CONTINUOUS，可取值详见变量类型；name为变量的名字，可选参量，默认为\"\"，由求解器内部自动生成；column为变量对应的列，可选参量，默认为None。",
         "code": "# 添加一个连续变量\nx = m.addVar()\n# 添加一个二进制变量\ny = m.addVar(vtype=COPT.BINARY)\n# 添加一个整数变量,下界为-1.0, 上界为1.0,目标函数系数为1.0,变量名为\"z\"\nz = m.addVar(-1.0, 1.0, 1.0, COPT.INTEGER, \"z\")"
     },
     {
-        "rowid": 6,
+        "rowid": 20302,
         "name": "Model.addVars()",
         "description": "摘要：addVars(*indices, lb=0.0, ub=COPT.INFINITY, obj=0.0, vtype=COPT.CONTINUOUS, nameprefix=\"C\")。描述：添加一组变量到模型中，并返回一个tupledict 类对象，其键为变量的下标，值为相应的Var 类对象。参量：*indices为变量的下标；lb为变量的下界，可选参量，默认为0.0；ub为变量的上界，可选参量，默认为COPT.INFINITY；obj为变量的目标函数系数，可选参量，默认为0.0；vtype为变量的类型，可选参量，默认为COPT.CONTINUOUS，可取值详见变量类型；nameprefix为变量的名称前缀，可选参量，默认为\"C\"，其实际名称结合变量的下标自动生成。",
         "code": "# 添加三维整数变量x,共计6个变量\nx = m.addVars(1, 2, 3, vtype=COPT.INTEGER)\n# 添加2个连续变量y,其下标由tl中的元素指定,变量名前缀为\"tl\"\ntl = tuplelist([(0, 1), (1, 2)])\ny = m.addVars(tl, nameprefix=\"tl\")"
     },
     {
-        "rowid": 7,
+        "rowid": 20303,
         "name": "Model.addMVar()",
         "description": "摘要：addMVar(shape, lb=0.0, ub=COPT.INFINITY, obj=0.0, vtype=COPT.CONTINUOUS, nameprefix=\"\")。描述：添加MVar 类对象到模型中。它在矩阵建模中使用，可以像NumPy 里多维数组一样运算，其形状和维度都有类似定义。参量：shape取值为整数，或者整数元组，表示MVar 类对象的形状；lb为变量的下界，可选参量，默认为0.0；ub为变量的上界，可选参量，默认为COPT.INFINITY；obj为变量的目标函数系数，可选参量，默认为0.0；vtype为变量的类型，可选参量，默认为COPT.CONTINUOUS，可取值详见变量类型；nameprefix为变量的名称前缀，可选参量，默认为\"\"，其实际名称结合变量的下标自动生成。返回值：返回一个MVar 类对象。",
         "code": "model.addMVar((2, 3), lb=0.0, nameprefix=\"mx\")"
     },
     {
-        "rowid": 8,
+        "rowid": 20304,
         "name": "Model.addConstr()",
         "description": "摘要：addConstr(lhs, sense=None, rhs=None, name=\"\")。描述：添加一个线性约束到模型中，返回Constraint 类对象或MConstr 类对象；添加一个半定约束到模型中，返回PsdConstraint 类对象或MPsdConstr 类对象；添加一个Indicator 约束到模型中，返回GenConstr 类对象；添加LMI 约束到模型中，返回LmiConstraint 类对象。若添加线性约束，则参数lhs 可取值为Var 类对象、LinExpr 类、ConstrBuilder 类对象或MConstrBuilder 类对象。若添加半定约束，则参数lhs 可取值为PsdExpr 类对象、PsdConstrBuilder 类对象或MPsdConstrBuilder 类对象。若添加Indicator 约束，则参数lhs 为GenConstrBuilder 类对象，并忽略其它参数；若添加LMI 约束，则参数lhs 为LmiExpr 类对象。参量：lhs为线性约束的左端项或约束构建器；sense为线性约束的类型，可选参量，默认为None，可取值详见约束类型；rhs为线性约束的右端项，可选参量，默认为None，可取值为常数、Var 类对象或LinExpr 类对象；name为线性约束的名称，可选参量，默认为\"\"，由求解器内部自动生成。",
         "code": "# 添加一个线性等式约束:x + y == 2\naddConstr(x + y, COPT.EQUAL, 2)\n添加一个线性大于等于约束:x + 2*y >= 3\naddConstr(x + 2*y >= 3.0)\n# 添加一个Indicator约束\nm.addConstr((x == 1) >> (2*y + 3*z <= 4))"
     },
     {
-        "rowid": 9,
+        "rowid": 20305,
         "name": "Model.addBoundConstr()",
         "description": "摘要：addBoundConstr(expr, lb=-COPT.INFINITY, ub=COPT.INFINITY, name=\"\")。描述：添加一个带上下界的线性约束到模型中，并返回添加的Constraint 类对象。参量：expr为线性约束的表达式，可取值为Var 类对象或LinExpr 类对象；lb为线性约束的下界，可选参量，默认为-COPT.INFINITY；ub为线性约束的上界，可选参量，默认为COPT.INFINITY；name为线性约束的名称，可选参量，默认为\"\"，由求解器内部自动生成。",
         "code": "# 添加线性双边约束:-1 <= x + y <= 1\n.addBoundConstr(x + y, -1.0, 1.0)"
     },
     {
-        "rowid": 10,
+        "rowid": 20306,
         "name": "Model.addConstrs()",
         "description": "摘要：addConstrs(generator, nameprefix=\"R\")。描述：添加一组线性约束、半定约束，或一组Indicator 约束到模型中。若参数generator 为整数，则返回一个ConstrArray 类对象，其元素为generator 个空Constraint 类对象，用户需要进一步指定这些约束的具体信息；若参数generator 为表达式生成器，则返回一个tupledict 类对象，其键为线性约束的下标，值为相应的Constraint 类对象，每个迭代生成一个Constraint 类对象；若参数 generator 为矩阵表达式生成器，则返回一个MConstr 类 对象 或MPsdConstr 类对象。若参数generator 为Indicator 约束表达式生成器，则返回一个GenConstrArray 类对象。参量：generator为整数或(矩阵)表达式生成器，或Indicator 约束表达式生成器；nameprefix为线性约束或Indicator 约束的名称前缀，可选参量，默认为\"R\"，其实际名称结合约束的下标自动生成。",
         "code": "# 添加10个线性约束,每个约束形如:x[0] + y[0] >= 2.0\nm.addConstrs(x[i] + y[i] >= 2.0 for i in range(10))"
     },
     {
-        "rowid": 11,
+        "rowid": 20307,
         "name": "Model.addMConstr()",
         "description": "摘要：addMConstr(A, x, sense, b, nameprefix=\"\")。描述：通过矩阵建模的方式，添加一组线性约束到模型中。如果这里sense 取值为COPT.LESS_EQUAL，添加的约束为A x<=b。更方便的是通过矩阵乘法生成MLinExpr 类对象，再使用重载的比较运算符生成MConstrBuilder 类对象，可以作为Model.addConstrs() 的输入生成一组线性约束。参量：A是一个二维的NumPy 矩阵，或者SciPy 列压缩矩阵( csc_matrix ) 或行压缩矩阵( csr_matrix )；x为线性项对应的变量，可以是MVar 类对象，VarArray 类对象、列表、字典或tupledict 类对象；如果为空，但参数c 不空，则取模型中所有的变量；sense为约束的类型，可取值参考约束类型；b为约束右边值，通常是浮点数，也可以是一组数，或者NumPy 的一维数组；nameprefix为约束名前缀。返回值：返回一个MConstr 类对象。",
         "code": "A = np.full((2, 3), 1)\nmx = model.addMVar(3, nameprefix=\"mx\")\nmc = model.addMConstr(A, mx, 'L', 1.0, nameprefix=\"mc\")"
+    },
+    {
+        "rowid": 20308,
+        "name": "Model.addSOS()",
+        "description": "摘要：addSOS(sostype, vars, weights=None)。描述：添加一个SOS约束到模型中，并返回添加的SOS类对象。若参数sostype为SOSBuilder类对象，则参数vars和参数weights的取值将被忽略；若参数sostype为SOS约束类型，则参数vars表示SOS约束的变量，可取值为VarArray类对象、列表、字典或tupledict类对象；若参数weights为None，则SOS约束的变量权重由求解器自动生成，否则采用用户传入的数据作为权重，可取值为列表、字典或tupledict类对象。参量：sostype（SOS约束类型或SOS约束构建器）、vars（SOS约束的变量）、weights（SOS约束的变量的权重，可选，默认为None）。",
+        "code": ".addSOS(COPT.SOS_TYPE1, [x, y], [1, 2])"
+    },
+    {
+        "rowid": 20309,
+        "name": "Model.addGenConstrIndicator()",
+        "description": "摘要：addGenConstrIndicator(binvar, binval, lhs, sense=None, rhs=None, type=COPT.INDICATOR_IF, name=\"\")。描述：添加一个指定类型的Indicator约束到模型中，并返回添加的GenConstr类对象。若参数lhs为ConstrBuilder类对象，则参数sense和参数rhs的取值将被忽略；若参数lhs表示线性约束左端项，可取值为Var类对象或LinExpr类对象。参量：binvar（Indicator变量）、binval（Indicator变量的取值，可取值为True或False）、lhs（Indicator约束中线性约束的左端项或线性约束构建器）、sense（Indicator约束中线性约束的类型，可选，默认为None）、rhs（Indicator约束中线性约束的右端项，可选，默认为None，可取值为常数）、type（Indicator约束的类型，可选，默认为COPT.INDICATOR_IF）、name（Indicator约束的名称，可选，默认为\"\"）。",
+        "code": "# 添加一个Indicator约束,当x为真时,线性约束y + 2*z >= 3成立\nm.addGenConstrIndicator(x, True, y + 2*z >= 3)\n# 添加一个Indicator约束,当线性约束y + 2*z >= 3成立时,x为真\naddGenConstrIndicator(x, True, y + 2*z >= 3, type=COPT.INDICATOR_ONLYIF)"
+    },
+    {
+        "rowid": 20310,
+        "name": "Model.addGenConstrIndicators()",
+        "description": "摘要：addGenConstrIndicators(builders, nameprefix=\"\")。描述：添加一组Indicator约束到模型中，并返回GenConstrArray类对象。参量：builders（一组Indicator约束构建器，可取值为GenConstrBuilderArray类对象，或者是由GenConstrBuilder类对象构成的字典或列表）、nameprefix（Indicator约束的名称前缀，可选，默认为\"\"）。",
+        "code": ""
+    },
+    {
+        "rowid": 20311,
+        "name": "Model.addConeByDim()",
+        "description": "摘要：addConeByDim(dim, ctype, vtype, nameprefix=\"ConeV\")。描述：添加一个指定维度的二阶锥约束到模型中，并返回添加的Cone类对象。参量：dim（二阶锥约束的维度）、ctype（二阶锥约束的类型）、vtype（二阶锥约束中变量的类型）、nameprefix（二阶锥约束中变量名称的前缀，可选取值，默认为\"ConeV\"）。",
+        "code": "# 添加一个5维的旋转二阶锥\nm.addConeByDim(5, COPT.CONE_RQUAD, None)"
+    },
+    {
+        "rowid": 20312,
+        "name": "Model.addExpConeByDim()",
+        "description": "摘要：addExpConeByDim(ctype, vtype, nameprefix=\"ExpConeV\")。描述：添加一个指数锥约束到模型中，并返回添加的ExpCone类对象。参量：ctype（指数锥约束的类型）、vtype（指数锥约束中变量的类型）、nameprefix（指数锥约束中变量名称的前缀，可选取值，默认为\"ExpConeV\"）。",
+        "code": "# 添加一个原始指数锥\n.addExpConeByDim(COPT.EXPCONE_PRIMAL, None)"
+    },
+    {
+        "rowid": 20313,
+        "name": "Model.addCone()",
+        "description": "摘要：addCone(vars, ctype)。描述：添加一个指定变量构成的二阶锥约束。若参数vars为ConeBuilder类对象，则参数ctype的值将被忽略；若参数vars为变量，可取值为VarArray类对象、列表、字典或tupledict类对象，参数ctype表示二阶锥的类型，必须被显式指定且不可为空。参量：vars（构成二阶锥约束的变量）、ctype（二阶锥约束的类型，可取值详见二阶锥约束类型）。",
+        "code": "# 添加由[z, x, y]构成的标准二阶锥约束\nm.addCone([z, x, y], COPT.CONE_QUAD)"
+    },
+    {
+        "rowid": 20314,
+        "name": "Model.addCones()",
+        "description": "摘要：addCones(vars, ctype=None)。描述：添加一组二阶锥约束。若参数vars为ConeBuilder类对象或ConeBuilderArray类对象，则参数ctype的值将被忽略；若参数vars为MVar类，则参数ctype表示二阶锥的类型，必须被显式指定且不可为空。参量：vars（构成二阶锥约束的变量）、ctype（二阶锥约束的类型，可取值详见二阶锥约束类型）。",
+        "code": ""
+    },
+    {
+        "rowid": 20315,
+        "name": "Model.addExpCones()",
+        "description": "摘要：addExpCones(vars, ctype)。描述：添加一组由指定变量构成指数锥约束。若参数vars为ExpConeBuilder类对象，则参数ctype的值将被忽略；若参数vars为MVar类，参数ctype表示指数锥约束的类型，需要被显式指定。参量：vars（构成指数锥约束的一组变量）、ctype（指数锥约束的类型，可取值请参考指数锥约束类型）。",
+        "code": ""
+    },
+    {
+        "rowid": 20316,
+        "name": "Model.addAffineCone()",
+        "description": "摘要：addAffineCone(exprs, ctype=None, name=\"\")。描述：添加一个仿射锥到模型中。若参数exprs为AffineConeBuilder类对象，则参数ctype的值将被忽略；若参数exprs为MLinExpr类对象或MPsdExpr类对象，参数ctype表示仿射锥的类型，必须被显式指定且不可为空。参量：exprs（仿射锥生成器或构成仿射锥的多维数组表达式）、ctype（仿射锥的类型，可取值详见二阶锥约束类型或指数锥约束类型）、name（仿射锥的名称，可选，默认为\"\"）。",
+        "code": "# 添加由Ax+b和c^Tx+d构成的标准二阶仿射锥\nA = np.array([[1, 2, 3],\n[4, 5, 6],\n[7, 8, 9]])\nb = 10\nc = np.array([1, -1, 2])\nd = 5\nmodel.addMVar(3)\nmodel.addAffineCone(cp.vstack(c @ x + d, A @ x + b), ctype=COPT.CONE_QUAD)"
+    },
+    {
+        "rowid": 20317,
+        "name": "Model.addAffineCones()",
+        "description": "摘要：addAffineCones(exprs, ctype=None, nameprefix=\"AffineConV\")。描述：添加一组仿射锥到模型中。若参数exprs为AffineConeBuilder类对象或AffineConeBuilderArray类对象，则参数ctype的值将被忽略；若参数exprs为MLinExpr类对象或MPsdExpr类对象，参数ctype表示仿射锥的类型，必须被显式指定且不可为空。参量：exprs（仿射锥生成器或构成仿射锥的多维数组表达式）、ctype（仿射锥的类型，可取值详见二阶锥约束类型或指数锥约束类型）、nameprefix（仿射锥的名称前缀，可选，默认为\"AffineConV\"）。",
+        "code": ""
+    },
+    {
+        "rowid": 20318,
+        "name": "Model.addQConstr()",
+        "description": "摘要：addQConstr(lhs, sense=None, rhs=None, name=\"\")。描述：添加一个线性约束或二次约束到模型中，并返回添加的Constraint类对象或QConstraint类对象。若添加线性约束，则参数lhs可取值为Var类对象、LinExpr类对象或ConstrBuilder类对象；若添加二次约束，则参数lhs为QConstrBuilder类对象，或者MQConstrBuilder类对象，并忽略其它参数。参量：lhs（约束的左端项或约束构建器）、sense（约束的类型，可选参量，默认为None，可取值详见约束类型）、rhs（约束的右端项，可选参量，默认为None，可取值为常数、Var类对象、LinExpr类对象或QuadExpr类对象）、name（约束的名称，可选参量，默认为\"\"，由求解器内部自动生成）。",
+        "code": "# 添加一个线性等式约束:x + y == 2\nm.addQConstr(x + y, COPT.EQUAL, 2)\n# 添加一个二次约束:x*x + y*y <= 3\nm.addQConstr(x*x + y*y <= 3.0)"
+    },
+    {
+        "rowid": 20319,
+        "name": "Model.addMQConstr()",
+        "description": "摘要：addMQConstr(Q, c, sense, rhs, xQ_L=None, xQ_R=None, xc=None, name=\"\")。描述：通过矩阵建模的方式，添加一个二次约束到模型中。如果这里sense取值为COPT.LESS_EQUAL，添加的约束为 x_{Q_L} Q x_{Q_R} + c x_{c} <= rhs。更方便的是通过矩阵乘法生成MQuadExpr类对象，再使用重载的比较运算符生成MQConstrBuilder类对象，可以作为Model.addQConstr()的输入生成二次约束。参量：Q（如果二次项非空，需要提供参数Q，即一个二维的NumPy矩阵，或者SciPy列压缩矩阵(csc_matrix)或行压缩矩阵(csr_matrix)）、c（如果一次项非空，需要提供参数c，即一个一维的NumPy数组，或者Python列表）、sense（约束的类型，可取值参考约束类型）、rhs（约束右边值，通常是浮点数）、xQ_L（二次项左侧的变量，可以是MVar类对象，VarArray类对象、列表、字典或tupledict类对象）、xQ_R（二次项右侧的变量，可以是MVar类对象，VarArray类对象、列表、字典或tupledict类对象；如果为空，则取模型中所有的变量）、xc（线性项对应的变量，可以是MVar类对象，VarArray类对象、列表、字典或tupledict类对象；如果为空，但参数c不空，则取模型中所有的变量）、name（约束名）。返回值：返回一个QConstraint类对象。",
+        "code": "# 创建一个3x3的全1矩阵Q\nQ = np.full((3, 3), 1)\n# 添加3维变量mx\nmx = model.addMVar(3, nameprefix=\"mx\")\n# 添加二次约束：mx' Q mx <= 1.0\nmqc = model.addMQConstr(Q, None, COPT.LESS_EQUAL, 1.0, mx, mx, None, name=\"mqc\")"
+    },
+    {
+        "rowid": 20320,
+        "name": "Model.addPsdVar()",
+        "description": "摘要：添加一个半定变量。描述：添加一个半定变量。参量：半定变量的维度、name（半定变量的名字）。",
+        "code": "添加维度为3,名称为\"X\" 的半定变量\nm.addPsdVar(3, \"X\")"
+    },
+    {
+        "rowid": 20321,
+        "name": "Model.addPsdVars()",
+        "description": "摘要：addPsdVars(dims, nameprefix=\"PSDV\")。描述：添加一组半定变量。参量：dim为半定变量的维度；nameprefix为半定变量名字的前缀，可选，默认值为\"PSDV\"",
+        "code": ".addPsdVars([3, 3])  # 添加2个维度均为3的半定变量"
+    },
+    {
+        "rowid": 20322,
+        "name": "Model.addUserCut()",
+        "description": "摘要：addUserCut(lhs, sense = None, rhs = None, name=\"\")。描述：向模型中添加一个割平面。参量：lhs为割平面约束的左端项，可取值为Var类对象、LinExpr类对象或约束构建器(ConstrBuilder类对象)；sense为割平面的约束类型，可选参量，默认为None，可取值详见约束类型；rhs为割平面约束的右端项，可选参量，默认为None，可取值为常数、Var类对象或LinExpr类对象；name为割平面的名称，可选参量，默认为\"\"，由求解器内部自动生成",
+        "code": "model.addUserCut(x+y <= 1)\nmodel.addUserCut(x+y == [0,1])"
+    },
+    {
+        "rowid": 20323,
+        "name": "Model.addUserCuts()",
+        "description": "摘要：addUserCuts(generator, nameprefix=\"U\")。描述：向模型中批量添加多个割平面。参量：generator为一组割平面生成器，可取值为一组线性约束构建器ConstrBuilderArray类对象或多维线性约束生成器MConstrBuilder类对象；nameprefix为割平面的名称前缀，可选参量，默认为\"U\"，其实际名称结合割平面的下标自动生成",
+        "code": "model.addUserCuts(x[i]+y[i] <= 1 for i in range(10))"
+    },
+    {
+        "rowid": 20324,
+        "name": "Model.addLazyConstr()",
+        "description": "摘要：addLazyConstr(lhs, sense = None, rhs = None, name=\"\")。描述：向模型中添加一个惰性约束。参量：lhs为惰性约束的左端项，可取值为Var类对象、LinExpr类对象或约束构建器(ConstrBuilder类对象)；sense为惰性约束的约束类型，可选参量，默认为None，可取值详见约束类型；rhs为惰性约束的右端项，可选参量，默认为None，可取值为常数、Var类对象或LinExpr类对象；name为惰性约束的名称，可选参量，默认为\"\"，由求解器内部自动生成",
+        "code": "model.addLazyConstr(x+y <= 1)\nmodel.addLazyConstr(x+y == [0,1])"
+    },
+    {
+        "rowid": 20325,
+        "name": "Model.addLazyConstrs()",
+        "description": "摘要：addLazyConstrs(generator, nameprefix=\"L\")。描述：向模型中批量添加多个惰性约束。参量：generator为一组惰性约束生成器，可取值为一组线性约束构建器ConstrBuilderArray类对象或多维线性约束生成器MConstrBuilder类对象；nameprefix为惰性约束的名称前缀，可选参量，默认为\"L\"，其实际名称结合惰性约束的下标自动生成",
+        "code": "model.addLazyConstrs(x[i]+y[i] <= 1 for i in range(10))"
+    },
+    {
+        "rowid": 20326,
+        "name": "Model.addGenConstrMin()",
+        "description": "摘要：addGenConstrMin(resvar, vars, constant=None, name=\"\")。描述：添加一条形如y=min{x_{1}, x_{2}, ..., x_{n}, c}的约束到模型中。参量：resvar为等式左端项y，可取值为Var或MVar类对象；vars为等式右端min{}函数的变量，可取值为list类对象；constant为等式右端min{}函数中的常数项，可选参数，可取值为浮点数，默认值为None；name为约束名称，可选参数，默认值为\"\"。返回值：返回一个GenConstrX类对象。",
+        "code": ""
+    },
+    {
+        "rowid": 20327,
+        "name": "Model.addGenConstrMax()",
+        "description": "摘要：addGenConstrMax(resvar, vars, constant=None, name=\"\")。描述：添加一条形如(y=max {x_{1}, x_{2}, cdots, x_{n}, c})的约束到模型中。参量：resvar为等式左端项y，可取值为Var或MVar类对象；vars为等式右端max{}函数的变量，可取值为list类对象；constant为等式右端max{}函数中的常数项，可选参量，可取值为浮点数，默认值为None；name为约束名称，可选参量，默认值为\"\"。返回值：返回一个GenConstrX类对象",
+        "code": ""
+    },
+    {
+        "rowid": 20328,
+        "name": "Model.addGenConstrAbs()",
+        "description": "摘要：addGenConstrAbs(resvar, argvar, name=\"\")。描述：添加一条形如(c y+d=|a x+b|)的约束到模型中。参量：resvar为cy + d，可取值为Var类、MVar类、LinExpr类或MLinExpr对象；argvar为ax + b，可取值为Var类、MVar类、LinExpr类或MLinExpr对象；name为约束名称，可选参数，默认值为\"\"。返回值：返回一个GenConstrX类对象",
+        "code": ""
+    },
+    {
+        "rowid": 20329,
+        "name": "Model.addGenConstrAnd()",
+        "description": "摘要：addGenConstrAnd(resvar, vars, name=\"\")。描述：添加一条逻辑and约束，(y=x_{1}) and (x_{2} cdots) and (x_{n})至模型中。参量：resvar为等式左端项y，可取值为二进制型Var类对象或MVar类对象；vars为逻辑运算符and连接的元素xi, for (i in{1,2, cdots, n})，可取值为List类(其中元素为二进制型Var类对象或MVar类对象)；name为约束名称，可选参数，默认值为\"\"。返回值：返回一个GenConstrX类对象",
+        "code": ""
+    },
+    {
+        "rowid": 20330,
+        "name": "Model.addGenConstrOr()",
+        "description": "摘要：addGenConstrOr(resvar, vars, name=\"\")。描述：添加一条逻辑or约束至模型中。参量：resvar为等式左端项y，可取值为二进制型Var类对象或MVar类对象；vars为逻辑运算符or连接的元素，可取值为List类(其中元素为二进制型Var类对象或MVar类对象)；name为约束名称，可选参数，默认值为\"\"。返回值：返回一个GenConstrX类对象",
+        "code": ""
+    },
+    {
+        "rowid": 20331,
+        "name": "Model.addGenConstrPWL()",
+        "description": "摘要：addGenConstrPWL(xvar, yvar, xpts, ypts, name=\"\")。描述：添加一条分段线性函数相关约束到模型中。参量：xvar为x，可取值为Var类对象或MVar类对象；yvar为等式左端项y，可取值为Var/MVar类或LinExpr/MLinExpr类对象；xpts为分段点的横坐标，需按照取值从小到大的顺序排列，可取值为List类；ypts为分段点的纵坐标，可取值为List类；name为约束名称，可选参数，默认值为\"\"。返回值：返回一个GenConstrX类对象",
+        "code": ""
+    },
+    {
+        "rowid": 20332,
+        "name": "Model.addSparseMat()",
+        "description": "摘要：addSparseMat(dim, rows, cols=None, vals=None)。描述：添加稀疏矩阵表示的对称矩阵。参量：dim为对称矩阵的维度；rows为对称矩阵非零元素的行索引；cols为对称矩阵非零元素的列索引；vals为对称矩阵非零元素值",
+        "code": "# 添加维度为3的对称矩阵\nm.addSparseMat(3, [0, 1, 2], [0, 1, 2], [2.0, 5.0, 8.0])\n# 添加维度为2的对称矩阵\nm.addSparseMat(2, [(0, 0, 3.0), (1, 0, 1.0)])"
+    },
+    {
+        "rowid": 20333,
+        "name": "Model.addDenseMat()",
+        "description": "摘要：addDenseMat(dim, vals)。描述：添加致密矩阵表示的对称矩阵。参量：dim为对称矩阵的维度；vals为对称矩阵非零元素值，可取值为常数、列表",
+        "code": "# 添加维度为3的全1对称矩阵\nm.addDenseMat(3, 1.0)"
+    },
+    {
+        "rowid": 20334,
+        "name": "Model.addDiagMat()",
+        "description": "摘要：addDiagMat(dim, vals, offset=None)。描述：添加对角对称矩阵。参量：dim为对称矩阵的维度；vals为对称矩阵非零元素值，可取值为常数、列表；offset为对角元素位置偏移量，若为正值，则对角线向上偏移；若为负值，则对角线向下偏移",
+        "code": "添加维度为3的单位矩阵\nm.addDiagMat(3, 1.0)"
+    },
+    {
+        "rowid": 20335,
+        "name": "Model.addOnesMat()",
+        "description": "摘要：addOnesMat(dim)。描述：添加全1矩阵。参量：dim为全1矩阵的维度",
+        "code": "添加维度为3的全1矩阵\nm.addOnesMat(3)"
+    },
+    {
+        "rowid": 20336,
+        "name": "Model.addEyeMat()",
+        "description": "摘要：addEyeMat(dim)。描述：添加单位矩阵。参量：dim为单位矩阵的维度",
+        "code": "# 添加维度为3的单位矩阵\naddEyeMat(3)"
+    },
+    {
+        "rowid": 20337,
+        "name": "Model.setObjective()",
+        "description": "摘要：setObjective(expr, sense=None)。描述：设置模型的目标函数。参量：expr为目标函数的表达式，可取值为常数、Var类对象、LinExpr类对象、QuadExpr类对象、MLinExpr类对象、MQuadExpr类对象，注意如果expr是LinExpr类对象，则更新目标函数中的线性项；如果是QuadExpr类对象，则更新目标函数中的二次项和线性项；sense为目标函数的优化方向，可选参量，默认为None，表示不改动模型的优化方向，模型的当前优化方向通过属性ObjSense查看，可取值详见优化方向",
+        "code": "# 设置目标函数为x + y,优化方向为最大化\nsetObjective(x + y, COPT.MAXIMIZE)"
+    },
+    {
+        "rowid": 20338,
+        "name": "Model.setMObjective()",
+        "description": "摘要：setMObjective(Q, c, constant, xQ_L=None, xQ_R=None, xc=None, sense=None)。描述：通过矩阵建模的方式，设置模型的二次目标。可添加形如 [TMP_60][TMP_60]...+constant 的目标函数。更方便的是通过矩阵乘法生成MQuadExpr类对象，可以作为setObjective()的输入设置目标函数。参量：Q：若二次项非空，需提供二维的NumPy矩阵，或SciPy列压缩矩阵(csc_matrix)、行压缩矩阵(csr_matrix)；c：若一次项非空，需提供一维的NumPy数组或Python列表；constant：常数项，通常是浮点数；xQ_L：二次项左侧的变量，可为MVar、VarArray、列表、字典或tupledict类对象，为空则取模型中所有变量；xQ_R：二次项右侧的变量，类型同xQ_L，为空则取模型中所有变量；xc：线性项对应的变量，类型同xQ_L，为空但c非空则取模型中所有变量；sense：目标函数的优化方向，可选，默认不改动，可通过ObjSense查看当前方向，取值详见优化方向。",
+        "code": "Q = np.full((3, 3), 1)\nmx = model.addMVar(3, nameprefix=\"mx\")\nmy = model.addVars(3, nameprefix=\"my\")\nmqc = model.setMObjective(Q, None, 0.0, mx, my, None, sense=COPT.MINIMIZE)"
+    },
+    {
+        "rowid": 20339,
+        "name": "Model.setObjSense()",
+        "description": "摘要：setObjSense(sense)。描述：设置目标函数的优化方向。参量：sense：目标函数的优化方向，可取值详见优化方向。",
+        "code": "# 设置优化方向为最大化\nm.setObjSense(COPT.MAXIMIZE)"
+    },
+    {
+        "rowid": 20340,
+        "name": "Model.setObjConst()",
+        "description": "摘要：setObjConst(const)。描述：设置目标函数的常数偏移量。参量：const：目标函数常数偏移量。",
+        "code": "设置目标函数常数偏移为1.0\nsetObjConst(1.0)"
+    },
+    {
+        "rowid": 20341,
+        "name": "Model.getObjective()",
+        "description": "摘要：getObjective()。描述：获取模型的目标函数，返回一个LinExpr类对象。",
+        "code": "# 获取模型的目标函数表达式\nobj = m.getObjective()"
+    },
+    {
+        "rowid": 20342,
+        "name": "Model.delQuadObj()",
+        "description": "摘要：delQuadObj()。描述：删除二次目标函数中的二次项。",
+        "code": "删除目标函数中的二次项\n.delQuadObj()"
+    },
+    {
+        "rowid": 20343,
+        "name": "Model.delPsdObj()",
+        "description": "摘要：delPsdObj()。描述：删除目标函数中的半定项。",
+        "code": "删除目标函数中的半定项\n.delPsdObj()"
+    },
+    {
+        "rowid": 20344,
+        "name": "Model.getCol()",
+        "description": "摘要：getCol(var)。描述：获取指定变量对应的列，返回一个Column类对象。",
+        "code": "获取变量x相应的列\ncol = m.getCol(x)"
+    },
+    {
+        "rowid": 20345,
+        "name": "Model.getRow()",
+        "description": "摘要：getRow(constr)。描述：获取指定线性约束对应的行，返回一个LinExpr类对象。",
+        "code": "# 获取线性约束conx相应的行\nlinexpr = m.getRow(conx)"
+    },
+    {
+        "rowid": 20346,
+        "name": "Model.getQuadRow()",
+        "description": "摘要：getQuadRow(qconstr)。描述：获取指定二次约束对应的行，返回一个QuadExpr类对象。",
+        "code": "# 获取二次约束qconx相应的行\nquadexpr = m.getQuadRow(qconx)"
+    },
+    {
+        "rowid": 20347,
+        "name": "Model.getPsdRow()",
+        "description": "摘要：getPsdRow(constr)。描述：获取指定半定约束对应的行，返回一个PsdExpr类对象。",
+        "code": "获取半定约束psdcon相应的行\npsdexpr = m.getPsdRow(psdcon)"
+    },
+    {
+        "rowid": 20348,
+        "name": "Model.getVar()",
+        "description": "摘要：getVar(idx)。描述：根据变量在模型中的下标获取相应的变量，返回一个Var类对象。参量：变量在系数矩阵中的下标，起始为0。",
+        "code": "获取下标为1的变量\nx = m.getVar(1)"
+    },
+    {
+        "rowid": 20349,
+        "name": "Model.getVarByName()",
+        "description": "摘要：getVarByName(name)。描述：根据变量的名称获取相应的变量，返回一个Var类对象。参量：变量的名称。",
+        "code": "获取名称为\"x\"的变量\nm.getVarByName(\"x\")"
+    },
+    {
+        "rowid": 20350,
+        "name": "Model.getVars()",
+        "description": "摘要：getVars()。描述：获取模型中的全部变量，返回一个VarArray类对象。",
+        "code": "获取模型中的全部变量\nvars = m.getVars()"
+    },
+    {
+        "rowid": 20351,
+        "name": "Model.getConstr()",
+        "description": "摘要：getConstr()。描述：根据线性约束在模型中的下标获取相应的线性约束，返回一个Constraint类对象。参量：线性约束在系数矩阵中的下标，起始为0。",
+        "code": "获取下标为1的线性约束\nm.getConstr(1)"
+    },
+    {
+        "rowid": 20352,
+        "name": "Model.getConstrByName()",
+        "description": "摘要：getConstrByName(name)。描述：根据线性约束的名称获取相应的线性约束，返回一个Constraint类对象。参量：name：线性约束的名称。",
+        "code": "获取名称为\"r\"的线性约束\nm.getConstrByName(\"r\")"
+    },
+    {
+        "rowid": 20353,
+        "name": "Model.getConstrs()",
+        "description": "摘要：getConstrs()。描述：获取模型中的全部线性约束，返回一个ConstrArray类对象。",
+        "code": "获取模型中的全部线性约束\ncons = m.getConstrs()"
+    },
+    {
+        "rowid": 20354,
+        "name": "Model.getConstrBuilders()",
+        "description": "摘要：getConstrBuilders(constrs=None)。描述：获取当前模型中的线性约束相应的构建器。若参数constrs为None，则返回全部线性约束相应构建器组成的一个ConstrBuilderArray类对象；若参数constrs为Constraint类对象，则返回指定约束相应的ConstrBuilder类对象；若参数constrs为列表或ConstrArray类对象，则返回指定约束相应构建器组成的一个ConstrBuilderArray类对象；若参数constrs为字典或tupledict类对象，则返回键为指定约束的下标，值为指定约束相应的构建器组成的一个tupledict类对象。参量：constrs：指定的线性约束，可选参量，默认为None。",
+        "code": "# 获取所有的线性约束构建器\nconbuilders = m.getConstrBuilders()\n# 获取线性约束x相应的构建器\nconbuilders = m.getConstrBuilders(x)\n# 获取线性约束x和y相应的构建器\nconbuilders = m.getConstrBuilders([x, y])\n获取tupledict对象xx中的线性约束相应的构建器\nconbuilders = m.getConstrBuilders(xx)"
+    },
+    {
+        "rowid": 20355,
+        "name": "Model.getSOS()",
+        "description": "摘要：getSOS(sos)。描述：根据指定的SOS约束获取相应的SOS约束构建器，返回一个SOSBuilder类对象。参量：sos：指定的SOS约束。",
+        "code": "# 获取SOS约束sosx相应的构建器\nsosbuilder = m.getSOS(sosx)"
+    },
+    {
+        "rowid": 20356,
+        "name": "Model.getSOSs()",
+        "description": "摘要：getSOSs()。描述：获取模型中的全部SOS约束，返回一个SOSArray类对象。",
+        "code": "# 获取模型中的全部SOS约束\nsoss = m.getSOSs()"
+    },
+    {
+        "rowid": 20357,
+        "name": "Model.getSOSBuilders()",
+        "description": "摘要：getSOSBuilders(soss=None)。描述：获取指定SOS约束相应的SOS约束构建器。若参数soss为None，则返回全部SOS约束相应构建器组成的一个SOSBuilderArray类对象；若参数soss为SOS类对象，则返回指定SOS约束相应的SOSBuilder类对象；若参数soss为列表或SOSArray类对象，则返回指定SOS约束相应构建器组成的一个SOSBuilderArray类对象。参量：soss：指定的SOS约束，可选参量，默认为None。",
+        "code": "# 获取模型中所有SOS约束相应的构建器\nsoss = m.getSOSBuilders()"
+    },
+    {
+        "rowid": 20358,
+        "name": "Model.getGenConstrIndicator()",
+        "description": "摘要：getGenConstrIndicator(genconstr)。描述：获取指定Indicator约束相应的Indicator约束构建器，返回一个GenConstrBuilder类对象。参量：genconstr：指定的Indicator约束。",
+        "code": "# 获取Indicator约束genx相应的构建器\nindic = m.getGenConstrIndicator(genx)"
+    },
+    {
+        "rowid": 20359,
+        "name": "Model.getGenConstr()",
+        "description": "摘要：getGenConstr(idx)。描述：获取模型中指定下标的Indicator约束，返回一个GenConstr类对象。参量：idx：Indicator约束在模型中的下标，起始为0。",
+        "code": "# 获取模型中下标为0的Indicator约束\ngenx = m.getGenConstr(0)"
+    },
+    {
+        "rowid": 20360,
+        "name": "Model.getGenConstrByName()",
+        "description": "摘要：getGenConstrByName(name)。描述：获取指定名称的Indicator约束，返回一个GenConstr类对象。参量：name：Indicator约束的名称。",
+        "code": "# 获取名称为\"r\"的Indicator约束\nm.getGenConstrByName(\"r\")"
+    },
+    {
+        "rowid": 20361,
+        "name": "Model.getGenConstrs()",
+        "description": "摘要：getGenConstrs()。描述：获取模型中的全部Indicator约束，返回一个GenConstrArray类对象。",
+        "code": "cons = m.getGenConstrs()"
+    },
+    {
+        "rowid": 20362,
+        "name": "Model.getGenConstrIndicators()",
+        "description": "摘要：getGenConstrIndicators(genconstrs=None)。描述：获取模型中指定Indicator约束的约束构建器，默认获取全部的Indicator约束。返回GenConstrBuilder类对象或GenConstrBuilderArray类对象。参量：genconstrs，指定的Indicator约束，可选参量，默认为None。",
+        "code": "cons = m.getGenConstrIndicators()"
+    },
+    {
+        "rowid": 20363,
+        "name": "Model.getCone()",
+        "description": "摘要：getCone(idx)。描述：获取模型中指定序号的二阶锥约束，返回一个Cone类对象。参量：idx，指定的序号，起始下标从0开始。",
+        "code": "cones = m.getCone(1)"
+    },
+    {
+        "rowid": 20364,
+        "name": "Model.getExpCone()",
+        "description": "摘要：getExpCone(idx)。描述：获取模型中指定序号的指数锥约束，返回一个ExpCone类对象。参量：idx，指定的序号，起始下标从0开始。",
+        "code": "cones = m.getExpCone(1)"
+    },
+    {
+        "rowid": 20365,
+        "name": "Model.getAffineCone()",
+        "description": "摘要：getAffineCone(idx)。描述：获取模型中指定序号的仿射锥约束，返回一个AffineCone类对象。参量：idx，指定的序号，起始下标从0开始。",
+        "code": "cones = m.getAffineCone(1)"
+    },
+    {
+        "rowid": 20366,
+        "name": "Model.getAffineConeByName()",
+        "description": "摘要：getAffineConeByName(name)。描述：获取模型中指定名称的仿射锥约束，返回一个AffineCone类对象。参量：name，指定的名称。",
+        "code": "cones = m.getAffineConeByName(\"afcone\")"
+    },
+    {
+        "rowid": 20367,
+        "name": "Model.getCones()",
+        "description": "摘要：getCones()。描述：获取模型中的全部二阶锥约束，返回一个ConeArray类对象。",
+        "code": "cones = m.getCones()"
+    },
+    {
+        "rowid": 20368,
+        "name": "Model.getExpCones()",
+        "description": "摘要：getExpCones()。描述：获取模型中的全部指数锥约束，返回一个ExpConeArray类对象。",
+        "code": "cones = m.getExpCones()"
+    },
+    {
+        "rowid": 20369,
+        "name": "Model.getAffineCones()",
+        "description": "摘要：getAffineCones()。描述：获取模型中的全部仿射锥约束，返回一个AffineConeArray类对象。",
+        "code": "cones = m.getAffineCones()"
+    },
+    {
+        "rowid": 20370,
+        "name": "Model.getConeBuilders()",
+        "description": "摘要：getConeBuilders(cones=None)。描述：获取指定二阶锥约束相应的二阶锥约束构建器。若参数cones为None，则返回全部二阶锥约束相应构建器组成的一个ConeBuilderArray类对象；若参数cones为Cone类对象，则返回指定二阶锥约束相应的ConeBuilder类对象；若参数cones为列表或ConeArray类对象，则返回指定二阶锥约束相应构建器组成的一个ConeBuilderArray类对象。参量：cones，指定的二阶锥约束，可选参量，默认为None。",
+        "code": "cones = m.getConeBuilders()"
+    },
+    {
+        "rowid": 20371,
+        "name": "Model.getExpConeBuilders()",
+        "description": "摘要：getExpConeBuilders(cones=None)。描述：获取指定指数锥约束相应的指数锥约束构建器。若参数cones为None，则返回全部指数锥约束相应构建器组成的一个ExpConeBuilderArray类对象；若参数cones为ExpCone类对象，则返回指定指数锥约束相应的ExpConeBuilder类对象；若参数cones为列表或ExpConeArray类对象，则返回指定指数锥约束相应构建器组成的一个ExpConeBuilderArray类对象。参量：cones，指定的指数锥约束，可选参量，默认为None。",
+        "code": "cones = m.getExpConeBuilders()"
+    },
+    {
+        "rowid": 20372,
+        "name": "Model.getAffineConeBuilders()",
+        "description": "摘要：getAffineConeBuilder(cones=None)。描述：获取指定仿射锥约束相应的仿射锥约束构建器。若参数cones为None，则返回全部仿射锥约束相应构建器组成的一个AffineConeBuilderArray类对象；若参数cones为AffineCone类对象，则返回指定仿射锥约束相应的AffineConeBuilder类对象；若参数cones为列表或AffineConeArray类对象，则返回指定仿射锥约束相应构建器组成的一个AffineConeBuilderArray类对象。参量：cones，指定的仿射锥约束，可选参量，默认为None。",
+        "code": "cones = m.getAffineConeBuilders()"
+    },
+    {
+        "rowid": 20373,
+        "name": "Model.getQConstr()",
+        "description": "摘要：getQConstr(idx)。描述：根据二次约束在模型中的下标获取相应的二次约束，返回一个QConstraint类对象。参量：idx，二次约束在模型中的下标，起始为0。",
+        "code": "qr = m.getQConstr(1)"
+    },
+    {
+        "rowid": 20374,
+        "name": "Model.getQConstrByName()",
+        "description": "摘要：getQConstrByName(name)。描述：根据二次约束的名称获取相应的二次约束，返回一个QConstraint类对象。参量：name，二次约束的名称。",
+        "code": "qr = m.getQConstrByName(\"qr\")"
+    },
+    {
+        "rowid": 20375,
+        "name": "Model.getQConstrs()",
+        "description": "摘要：getQConstrs()。描述：获取模型中的全部二次约束，返回一个QConstrArray类对象。",
+        "code": "qcons = m.getQConstrs()"
+    },
+    {
+        "rowid": 20376,
+        "name": "Model.getQConstrBuilders()",
+        "description": "摘要：getQConstrBuilders(qconstrs=None)。描述：获取当前模型中的二次约束相应的构建器。若参数qconstrs为None，则返回全部二次约束相应构建器组成的一个QConstrBuilderArray类对象；若参数qconstrs为QConstraint类对象，则返回指定约束相应的QConstrBuilder类对象；若参数qconstrs为列表或QConstrArray类对象，则返回指定约束相应构建器组成的一个QConstrBuilderArray类对象；若参数qconstrs为字典或tupledict类对象，则返回键为指定约束的下标，值为指定约束相应的构建器组成的一个tupledict类对象。参量：qconstrs，指定的二次约束，可选参量，默认为None。",
+        "code": "qconbuilders = m.getQConstrBuilders()\nqconbuilders = m.getQConstrBuilders(qx)\nqconbuilders = m.getQConstrBuilders([qx, qy])\nqconbuilders = m.getQConstrBuilders(qxx)"
+    },
+    {
+        "rowid": 20377,
+        "name": "Model.getPsdVar()",
+        "description": "摘要：getPsdVar(idx)。描述：根据半定变量在模型中的下标获取相应的半定变量，返回一个PsdVar类对象。参量：idx，半定变量在模型中的下标，起始为0。",
+        "code": "x = m.getPsdVar(1)"
+    },
+    {
+        "rowid": 20378,
+        "name": "Model.getPsdVarByName()",
+        "description": "摘要：getPsdVarByName(name)。描述：根据半定变量的名称获取相应的半定变量，返回一个PsdVar类对象。参量：name，半定变量的名称。",
+        "code": "x = m.getPsdVarByName(\"x\")"
+    },
+    {
+        "rowid": 20379,
+        "name": "Model.getPsdVars()",
+        "description": "摘要：getPsdVars()。描述：获取模型中的全部半定变量，返回一个PsdVarArray类对象。",
+        "code": "vars = m.getPsdVars()"
+    },
+    {
+        "rowid": 20380,
+        "name": "Model.getPsdConstr()",
+        "description": "摘要：getPsdConstr(idx)。描述：根据半定约束在模型中的下标获取相应的半定约束，返回一个PsdConstraint类对象。参量：idx，半定约束在模型中的下标，起始为0。",
+        "code": "m.getPsdConstr(1)"
+    },
+    {
+        "rowid": 20381,
+        "name": "Model.getPsdConstrByName()",
+        "description": "摘要：getPsdConstrByName(name)。描述：根据半定约束的名称获取相应的半定约束，返回一个PsdConstraint类对象。参量：name，半定约束的名称。",
+        "code": "r = m.getPsdConstrByName(\"r\")"
+    },
+    {
+        "rowid": 20382,
+        "name": "Model.getPsdConstrs()",
+        "description": "摘要：getPsdConstrs()。描述：获取模型中的全部半定约束，返回一个PsdConstrArray类对象。",
+        "code": "cons = m.getPsdConstrs()"
+    },
+    {
+        "rowid": 20383,
+        "name": "Model.getPsdConstrBuilders()",
+        "description": "摘要：getPsdConstrBuilders(constrs=None)。描述：获取当前模型中的半定约束相应的构建器。若参数constrs为None，则返回全部半定约束相应构建器组成的一个PsdConstrBuilderArray类对象；若参数constrs为PsdConstraint类对象，则返回指定半定约束相应的PsdConstrBuilder类对象；若参数constrs为列表或PsdConstrArray类对象，则返回指定半定约束相应构建器组成的一个PsdConstrBuilderArray类对象；若参数constrs为字典或tupledict类对象，则返回键为指定半定约束的下标，值为指定半定约束相应的构建器组成的一个tupledict类对象。参量：constrs，指定的半定约束，可选参量，默认为None。",
+        "code": "conbuilders = m.getPsdConstrBuilders()\nconbuilders = m.getPsdConstrBuilders(x)\nconbuilders = m.getPsdConstrBuilders([x, y])\nconbuilders = m.getPsdConstrBuilders(xx)"
+    },
+    {
+        "rowid": 20384,
+        "name": "Model.getLmiRow()",
+        "description": "摘要：getLmiRow(constr)。描述：获取参与指定LMI约束的LMI表达式，包括变量和对应的系数矩阵。参量：constr，指定的约束。",
+        "code": "expr = m.getLmiRow(c)"
+    },
+    {
+        "rowid": 20385,
+        "name": "Model.getLmiConstr()",
+        "description": "摘要：getLmiConstr(idx)。描述：获取模型中指定索引对应的LMI约束。参量：idx，LMI约束在模型中的下标，起始为0。",
+        "code": "coeff = m.getLmiConstr(1)"
+    },
+    {
+        "rowid": 20386,
+        "name": "Model.getLmiConstrByName()",
+        "description": "摘要：getLmiConstrByName(name)。描述：获取模型中指定名称的LMI约束。参量：指定的LMI约束名称。",
+        "code": "# 获取模型中名称为r1的LMI约束\nname = m.getLmiConstrByName(\"r1\")"
+    },
+    {
+        "rowid": 20387,
+        "name": "Model.getLmiConstrs()",
+        "description": "摘要：getLmiConstrs()。描述：获取模型中所有的LMI约束。返回LMI约束构成的LmiConstrArray类对象。",
+        "code": ""
+    },
+    {
+        "rowid": 20388,
+        "name": "Model.getLmiRhs()",
+        "description": "摘要：getLmiRhs(constr)。描述：获取指定LMI约束的常数项。返回SymMatrix类对象。参量：constr（指定的LMI约束）。",
+        "code": ""
+    },
+    {
+        "rowid": 20389,
+        "name": "Model.setLmiRhs()",
+        "description": "摘要：setLmiRhs(constr, mat)。描述：设置指定LMI约束的常数项。参量：constr（指定的LMI约束）；mat（新的常数项矩阵）。",
+        "code": "# 设置LMI约束con的常数项对称矩阵为D\n.setLmiRhs(con, D)"
+    },
+    {
+        "rowid": 20390,
+        "name": "Model.getLmiSolution()",
+        "description": "摘要：getLmiSolution()。描述：获取LMI约束的取值和对偶值。",
+        "code": ""
+    },
+    {
+        "rowid": 20391,
+        "name": "Model.getLmiSlacks()",
+        "description": "摘要：getLmiSlacks()。描述：获取LMI约束全部松弛变量的取值，返回一个列表对象。",
+        "code": ""
+    },
+    {
+        "rowid": 20392,
+        "name": "Model.getLmiDuals()",
+        "description": "摘要：getLmiDuals()。描述：获取LMI约束全部对偶变量的取值，返回一个列表对象。",
+        "code": ""
+    },
+    {
+        "rowid": 20393,
+        "name": "Model.getCoeff()",
+        "description": "摘要：getCoeff(constr, var)。描述：获取变量在线性约束、半定约束或LMI约束中的系数。参量：constr（指定的线性约束、半定约束或LMI约束）；var（指定的变量或半定变量）。",
+        "code": "# 获取变量x在约束c1中的系数\ncoeff1 = m.getCoeff(c1, x)\n# 获取半定变量X在约束c2中的系数\ncoeff2 = m.getCoeff(c2, X)"
+    },
+    {
+        "rowid": 20394,
+        "name": "Model.setCoeff()",
+        "description": "摘要：setCoeff(constr, var, newval)。描述：设置变量在线性约束、半定约束或LMI约束中的系数。参量：constr（指定的线性约束、半定约束或LMI约束）；var（指定的变量或半定变量）；newval（待设置的新系数或系数对称矩阵）。",
+        "code": "# 设置变量x在约束c中的系数为1.0\nsetCoeff(c, x, 1.0)"
+    },
+    {
+        "rowid": 20395,
+        "name": "Model.setCoeffs()",
+        "description": "摘要：setCoeffs(constrs, vars, vals)。描述：批量设置变量在线性约束中的系数。注意变量和约束组合不能重复出现，即不能对约束constr中的变量var重复设置相同或不同的系数。参量：constrs（指定和待设置系数相关的约束，可取值为字典、tupledict类对象、ConstrArray类对象或一组Constraint类对象）；vars（指定和待设置系数相关的变量，可取值为字典、tupledict类对象、VarArray类对象或一组Var类对象）；vals（待设置的新系数值，可取值为常数，或者是与constrs相匹配的列表或字典）。",
+        "code": ""
+    },
+    {
+        "rowid": 20396,
+        "name": "Model.getA()",
+        "description": "摘要：getA()。描述：获取模型的系数矩阵，返回一个scipy.sparse.csc_matrix对象。该方法依赖scipy工具包。",
+        "code": "# 获取模型的系数矩阵\nA = model.getA()"
+    },
+    {
+        "rowid": 20397,
+        "name": "Model.loadMatrix()",
+        "description": "摘要：loadMatrix(c, A, lhs, rhs, lb, ub, vtype=None)。描述：加载矩阵和向量信息构建模型。该方法依赖scipy工具包。参量：c（目标函数系数，若为None，则表示目标函数系数全为0）；A（系数矩阵，类型要求为scipy.sparse.csc_matrix）；lhs（约束的下边界）；rhs（约束的上边界）；lb（变量的下边界，若为None，则表示下边界全为0）；ub（变量的上边界，若为None，则表示上边界全为COPT.INFINITY）；vtype（变量类型，默认为None，表示全部为连续变量）。",
+        "code": "# 矩阵数据构建模型\n.loadMatrix(c, A, lhs, rhs, lb, ub)"
+    },
+    {
+        "rowid": 20398,
+        "name": "Model.loadCone()",
+        "description": "摘要：loadCone(ncone, types, dims, indices)。描述：加载二阶锥到模型中。参量：ncone（二阶锥的个数）；types（二阶锥的类型，可取值请参考二阶锥约束类型）；dims（二阶锥的维度）；indices（构成二阶锥的变量的下标数组）。",
+        "code": ""
+    },
+    {
+        "rowid": 20399,
+        "name": "Model.loadExpCone()",
+        "description": "摘要：loadExpCone(ncone, types, indices)。描述：加载指数锥到模型中。参量：ncone（指数锥的个数）；types（指数锥的类型，可取值请参考指数锥约束类型）；indices（构成指数锥的变量的下标数组）。",
+        "code": ""
+    },
+    {
+        "rowid": 20400,
+        "name": "Model.getLpSolution()",
+        "description": "摘要：getLpSolution()。描述：获取线性规划模型的变量取值、松弛变量取值、对偶变量取值和变量的Reduced cost，返回一个四元元组对象，元组中每个元素为一个列表对象。",
+        "code": "获取线性规划模型的解\nvalues, slacks, duals, redcosts = m.getLpSolution()"
+    },
+    {
+        "rowid": 20401,
+        "name": "Model.setLpSolution()",
+        "description": "摘要：setLpSolution(values, slack, duals, redcost)。描述：设置线性规划模型的变量取值、松弛变量取值、对偶变量取值和变量的Reduced cost。参量：values（变量取值）；slack（松弛变量取值）；duals（对偶变量取值）；redcost（变量的Reduced cost）。",
+        "code": "# 设置线性规划模型的解\nm.setLpSolution(values, slack, duals, redcost)"
+    },
+    {
+        "rowid": 20402,
+        "name": "Model.getValues()",
+        "description": "摘要：getValues()。描述：获取线性或整数规划模型的全部变量取值，返回一个列表对象。",
+        "code": "# 获取模型中所有变量的取值\nvalues = m.getValues()"
+    },
+    {
+        "rowid": 20403,
+        "name": "Model.getRedcosts()",
+        "description": "摘要：getRedcosts()。描述：获取线性规划模型全部变量的Reduced cost，返回一个列表对象。",
+        "code": "# 获取模型中所有变量的Reduced cost\nredcosts = m.getRedcosts()"
+    },
+    {
+        "rowid": 20404,
+        "name": "Model.getSlacks()",
+        "description": "摘要：getSlacks()。描述：获取线性规划全部松弛变量的取值，返回一个列表对象。",
+        "code": "获取模型中所有松弛变量的取值\nslacks = m.getSlacks()"
+    },
+    {
+        "rowid": 20405,
+        "name": "Model.getDuals()",
+        "description": "摘要：getDuals()。描述：获取线性规划全部对偶变量的取值，返回一个列表对象。",
+        "code": "获取模型中所有对偶变量的取值\nduals = m.getDuals()"
+    },
+    {
+        "rowid": 20406,
+        "name": "Model.getVarBasis()",
+        "description": "摘要：getVarBasis(vars=None)。描述：获取指定变量的基状态。若参数vars为None，则返回全部变量的基状态组成的一个列表对象；若参数vars为Var类对象，则返回指定变量的基状态；若参数vars为列表或VarArray类对象，则返回指定变量的基状态组成的一个列表对象；若参数vars为字典或tupledict类对象，则返回键为指定变量的下标，值为指定变量的基状态组成的一个tupledict类对象。参量：vars，指定的变量，可选参量，默认为None。",
+        "code": "# 获取模型中全部变量的基状态\nvarbasis = m.getVarBasis()\n# 获取变量x和y的基状态\nvarbasis = m.getVarBasis([x, y])\n# 获取tupledict对象xx中的变量相应的基状态\nvarbasis = m.getVarBasis(xx)"
+    },
+    {
+        "rowid": 20407,
+        "name": "Model.getConstrBasis()",
+        "description": "摘要：getConstrBasis(constrs=None)。描述：获取线性规划中线性约束的基状态。若参数constrs为None，则返回全部线性约束的基状态组成的一个列表对象；若参数constrs为Constraint类对象，则返回指定线性约束的基状态；若参数constrs为列表或ConstrArray类对象，则返回指定线性约束的基状态组成的一个列表对象；若参数constrs为字典或tupledict类对象，则返回键为指定线性约束的下标，值为指定约束的基状态组成的一个tupledict类对象。参量：constrs，指定的线性约束，可选参量，默认为None。",
+        "code": "# 获取模型中全部线性约束的基状态\nconbasis = m.getConstrBasis()\n# 获取模型中线性约束r0和r1相应的基状态\nconbasis = m.getConstrBasis([r0, r1])\n# 获取tupledict对象rr中的线性约束相应的基状态\nconbasis = m.getConstrBasis(rr)"
+    },
+    {
+        "rowid": 20408,
+        "name": "Model.getPoolObjVal()",
+        "description": "摘要：getPoolObjVal(isol)。描述：获取解池中第isol个解的目标函数值，返回一个常数。参量：isol，解池中解的索引。",
+        "code": "# 获取第2个解的目标函数值\nobjval = m.getPoolObjVal(2)"
+    },
+    {
+        "rowid": 20409,
+        "name": "Model.getPoolSolution()",
+        "description": "摘要：getPoolSolution(isol, vars)。描述：获取解池中第isol个解中指定变量的取值。若参数vars为Var类对象，则返回指定变量的取值；若参数vars为列表或VarArray类对象，则返回指定变量的取值组成的一个列表对象；若参数vars为字典或tupledict类对象，则返回键为指定变量的下标，值为指定变量的取值组成的一个tupledict类对象。参量：isol，解池中解的索引；vars，指定的变量。",
+        "code": "# 获取第2个解中变量x的值\nxval = m.getPoolSolution(2, x)"
+    },
+    {
+        "rowid": 20410,
+        "name": "Model.getVarLowerIIS()",
+        "description": "摘要：getVarLowerIIS(vars)。描述：获取指定变量下边界的IIS状态。若参数vars为Var类对象，则返回指定变量下边界的IIS状态；若参数vars为列表或VarArray类对象，则返回指定变量下边界的IIS状态组成的一个列表对象；若参数vars为字典或tupledict类对象，则返回键为指定变量的下标，值为指定变量下边界的IIS状态组成的一个tupledict类对象。参量：vars，指定的变量。",
+        "code": "# 获取变量x和y的下边界的IIS状态\nlowerIIS = m.getVarLowerIIS([x, y])\n# 获取tupledict对象xx中的变量下边界相应的IIS状态\nlowerIIS = m.getVarLowerIIS(xx)"
+    },
+    {
+        "rowid": 20411,
+        "name": "Model.getVarUpperIIS()",
+        "description": "摘要：getVarUpperIIS(vars)。描述：获取指定变量上边界的IIS状态。若参数vars为Var类对象，则返回指定变量上边界的IIS状态；若参数vars为列表或VarArray类对象，则返回指定变量上边界的IIS状态组成的一个列表对象；若参数vars为字典或tupledict类对象，则返回键为指定变量的下标，值为指定变量上边界的IIS状态组成的一个tupledict类对象。参量：vars，指定的变量。",
+        "code": "# 获取变量x和y的上边界的IIS状态\nupperIIS = m.getVarUpperIIS([x, y])\n# 获取tupledict对象xx中的变量上边界相应的IIS状态\nupperIIS = m.getVarUpperIIS(xx)"
+    },
+    {
+        "rowid": 20412,
+        "name": "Model.getConstrLowerIIS()",
+        "description": "摘要：getConstrLowerIIS(constrs)。描述：获取指定约束下边界的IIS状态。若参数constrs为Constraint类对象，则返回指定约束下边界的IIS状态；若参数constrs为列表或ConstrArray类对象，则返回指定约束下边界的IIS状态组成的一个列表对象；若参数constrs为字典或tupledict类对象，则返回键为指定约束的下标，值为指定约束下边界的IIS状态组成的一个tupledict类对象。参量：constrs，指定的约束。",
+        "code": "# 获取模型中约束r0和r1相应下边界的IIS状态\nlowerIIS = m.getConstrLowerIIS([r0, r1])\n# 获取tupledict对象rr中的约束下边界相应的IIS状态\nlowerIIS = m.getConstrLowerIIS(rr)"
+    },
+    {
+        "rowid": 20413,
+        "name": "Model.getConstrUpperIIS()",
+        "description": "摘要：getConstrUpperIIS(constrs)。描述：获取指定约束上边界的IIS状态。若参数constrs为Constraint类对象，则返回指定约束上边界的IIS状态；若参数constrs为列表或ConstrArray类对象，则返回指定约束上边界的IIS状态组成的一个列表对象；若参数constrs为字典或tupledict类对象，则返回键为指定约束的下标，值为指定约束上边界的IIS状态组成的一个tupledict类对象。参量：constrs，指定的约束。",
+        "code": "# 获取模型中约束r0和r1相应上边界的IIS状态\nupperIIS = m.getConstrUpperIIS([r0, r1])\n# 获取tupledict对象rr中的约束上边界相应的IIS状态\nupperIIS = m.getConstrUpperIIS(rr)"
+    },
+    {
+        "rowid": 20414,
+        "name": "Model.getSOSIIS()",
+        "description": "摘要：getSOSIIS(soss)。描述：获取指定SOS约束的IIS状态。若参数soss为SOS类对象，则返回指定SOS约束的IIS状态；若参数soss为列表或SOSArray类对象，则返回指定SOS约束的IIS状态组成的一个列表对象；若参数soss为字典或tupledict类对象，则返回键为指定SOS约束的下标，值为指定SOS约束的IIS状态组成的一个tupledict类对象。参量：soss，指定的SOS约束。",
+        "code": "# 获取模型中SOS约束r0和r1相应的IIS状态\nsosIIS = m.getSOSIIS([r0, r1])\n# 获取tupledict对象rr中的SOS约束相应的IIS状态\nsosIIS = m.getSOSIIS(rr)"
+    },
+    {
+        "rowid": 20415,
+        "name": "Model.getIndicatorIIS()",
+        "description": "摘要：getIndicatorIIS(genconstrs)。描述：获取指定Indicator约束的IIS状态。若参数genconstrs为GenConstr类对象，则返回指定Indicator约束的IIS状态；若参数genconstrs为列表或GenConstrArray类对象，则返回指定Indicator约束的IIS状态组成的一个列表对象；若参数genconstrs为字典或tupledict类对象，则返回键为指定Indicator约束的下标，值为指定Indicator约束的IIS状态组成的一个tupledict类对象。参量：genconstrs，指定的Indicator约束。",
+        "code": "# 获取模型中Indicator约束r0和r1相应的IIS状态\nindicatorIIS = m.getIndicatorIIS([r0, r1])\n# 获取tupledict对象rr中的Indicator约束相应的IIS状态\nindicatorIIS = m.getIndicatorIIS(rr)"
+    },
+    {
+        "rowid": 20416,
+        "name": "Model.getAttr()",
+        "description": "摘要：getAttr(attrname)。描述：获取指定的模型属性值，返回一个常数。参量：attrname，指定的属性名，可取值详见属性章节部分。",
+        "code": "# 获取目标函数的常数项\nobjconst = m.getAttr(COPT.Attr.ObjConst)"
+    },
+    {
+        "rowid": 20417,
+        "name": "Model.getInfo()",
+        "description": "摘要：getInfo(infoname, args)。描述：获取指定变量或约束的信息值。若参数args为Var类对象或Constraint类对象，则返回指定变量或约束的信息值常数；若参数args为列表、VarArray类对象或ConstrArray类对象，则返回指定变量或约束的信息值组成的一个列表对象；若参数args为字典或tupledict类对象，则返回键为指定变量或约束的下标，值为指定变量或约束的信息值组成的一个tupledict类对象；若参数args为MVar类对象、MConstr类对象、MQConstr类对象或MPsdConstr类对象，则返回指定变量或约束的信息值组成的一个numpy.ndarray对象。参量：infoname，待获取信息名，可取值详见信息部分；args，待获取信息的变量或者约束。",
+        "code": "# 获取模型中全部线性约束的下界信息\nlb = m.getInfo(COPT.Info.LB, m.getConstrs())\n# 获取变量x和y的取值信息\nsol = m.getInfo(COPT.Info.Value, [x, y])\n# 获取tupledict对象shipconstr中的线性约束相应的对偶变量取值信息\ndual = m.getInfo(COPT.Info.Dual, shipconstr)"
+    },
+    {
+        "rowid": 20418,
+        "name": "Model.getVarType()",
+        "description": "摘要：getVarType(vars)。描述：获取指定变量的类型。若参数vars为Var类对象，则返回指定变量的类型；若参数vars为列表或VarArray类对象，则返回指定变量的类型组成的一个列表对象；若参数vars为字典或tupledict类对象，则返回键为指定变量的下标，值为指定变量的类型组成的一个tupledict类对象。参量：vars，指定的变量。",
+        "code": "# 获取变量x的类型\nxtype = m.getVarType(x)\n# 获取变量x、y和z的类型\nxtype = m.getVarType([x, y, z])\n# 获取tupledict对象xdict中的变量的类型\nxtype = m.getVarType(xdict)"
+    },
+    {
+        "rowid": 20419,
+        "name": "Model.getParam()",
+        "description": "摘要：getParam(paramname)。描述：获取指定的优化参数的当前值，返回一个常数。参量：paramname，指定的优化参数名，可取值详见参数部分。",
+        "code": "# 获取优化求解时间限制的当前值\ntimelimit = m.getParam(COPT.Param.TimeLimit)"
+    },
+    {
+        "rowid": 20420,
+        "name": "Model.getParamInfo()",
+        "description": "摘要：getParamInfo(paramname)。描述：获取指定的优化参数的信息，返回一个元组对象，其元素分别为：参数名、当前值、默认值、最小值和最大值。参量：paramname，指定的优化参数名，可取值详见参数部分。",
+        "code": "# 获取优化求解时间限制参数的信息\npname, pcur, pdef, pmin, pmax = m.getParamInfo(COPT.Param.TimeLimit)"
+    },
+    {
+        "rowid": 20421,
+        "name": "Model.setBasis()",
+        "description": "摘要：setBasis(varbasis, constrbasis)。描述：设置线性规划中全部变量和线性约束的基状态。参数varbasis和constrbasis为列表对象，其元素数目分别为模型中的变量总数和线性约束总数。参量：varbasis，变量的基状态；constrbasis，线性约束的基状态。",
+        "code": "# 设置模型中全部变量和线性约束的基状态\n.setBasis(varbasis, constrbasis)"
+    },
+    {
+        "rowid": 20422,
+        "name": "Model.setSlackBasis()",
+        "description": "摘要：setSlackBasis()。描述：设置线性规划的基为松弛基。",
+        "code": "# 设置基状态为松弛基\n.setSlackBasis()"
+    },
+    {
+        "rowid": 20423,
+        "name": "Model.setVarType()",
+        "description": "摘要：setVarType(vars, vartypes)。描述：设置指定变量的类型。若参数vars为Var类对象，则参数vartypes为变量类型常量；若参数vars为字典或tupledict类对象，则参数vartypes可为变量类型常量、字典或tupledict类对象；若参数vars为列表或VarArray类对象，则参数vartypes可为变量类型常量或列表对象。参量：vars，指定的变量；vartypes，指定的变量类型。",
+        "code": "# 设置变量x为整数变量\nm.setVarType(x, COPT.INTEGER)\n# 设置变量x和y为二进制变量\nm.setVarType([x, y], COPT.BINARY)\n# 设置tupledict对象xdict中的变量为连续变量\nm.setVarType(xdict, COPT.CONTINUOUS)"
+    },
+    {
+        "rowid": 20424,
+        "name": "Model.setNames()",
+        "description": "摘要：setNames(args, names)。描述：设置指定变量或约束的名称。参量：args，指定的变量或约束，可取值为单个或一组：Var类，Constraint类，QConstraint类，PsdVar类，PsdConstraint类，LmiConstraint类，GenConstr类或AffineCone类，以及由它们构成的列表或者字典对象；names，指定的变量或约束名称，可以是单个字符串，或者是与args匹配的列表或字典对象。",
+        "code": "# 设置变量x为的名称为\"var\"\nm.setNames(x, \"var\")\n# 设置约束constr1的名称为\"c1\", constr2的名称为\"c2\"\n.setNames([constr1, constr2], [\"c1\", \"c2\"])"
+    },
+    {
+        "rowid": 20425,
+        "name": "Model.setMipStart()",
+        "description": "摘要：setMipStart(vars, startvals)。描述：设置指定变量的初始值，仅对整数规划模型有效。若参数vars为Var类对象，则参数startvals为常量；若参数vars为字典或tupledict类对象，则参数startvals可为常量、字典或tupledict类对象；若参数vars为列表或VarArray类对象，则参数startvals可为常量或列表对象。注意：可以通过多次调用该方法来输入不同的初始解。请务必在输入结束后，调用loadMipStart()。参量：vars，指定的变量；startvals，指定的变量初始值。",
+        "code": "# 设置变量x的初始解为1\nm.setMipStart(x, 1)\n# 设置变量x和y的初始解分别为2和3\nm.setMipStart([x, y], [2, 3])\n# 设置tupledict对象xdict中的变量的初始解均为1\nm.setMipStart(xdict, 1)\n# 加载初始解信息到模型\nm.loadMipStart()"
+    },
+    {
+        "rowid": 20426,
+        "name": "Model.setInfo()",
+        "description": "摘要：setInfo(infoname, args, newvals)。描述：设置指定变量或约束的信息值。若参数args为Var类对象或Constraint类对象，则参数newvals为常量；若参数args为字典或tupledict类对象，则参数newvals可为常量、字典或tupledict类对象；若参数args为列表、VarArray类对象或ConstrArray类对象，则参数newvals可为常量或列表对象；若参数args为MVar类对象、MConstr类对象、MQConstr类对象或MPsdConstr类对象，则参数newvals可为常量或numpy.ndarray对象。参量：infoname，指定信息名，可取值详见信息部分；args，指定的变量或线性约束；newvals，指定的新信息值。",
+        "code": "# 设置变量x的上界为1.0\nm.setInfo(COPT.Info.UB, x, 1.0)\n# 设置变量x和y的下界分别为1.0和2.0\nm.setInfo(COPT.Info.LB, [x, y], [1.0, 2.0])\n# 设置tupledict对象xdict中的变量的目标函数系数均为0\nm.setInfo(COPT.Info.OBJ, xdict, 0.0)"
+    },
+    {
+        "rowid": 20427,
+        "name": "Model.setParam()",
+        "description": "摘要：setParam(paramname, newval)。描述：设置优化参数为指定值。参量：paramname，指定的优化参数，可取值详见参数部分；newval，指定的优化参数新值。",
+        "code": "设置优化参数求解时间限制为1小时\nm.setParam(COPT.Param.TimeLimit, 3600)"
+    },
+    {
+        "rowid": 20428,
+        "name": "Model.resetParam()",
+        "description": "摘要: resetParam()\n描述: 将模型所有优化参数重置为默认值。",
+        "code": "# 重置模型所有优化参数为默认值\nm.resetParam()"
+    },
+    {
+        "rowid": 20429,
+        "name": "Model.read()",
+        "description": "摘要: read(filename)\n描述: 根据文件名后缀判断文件类型并读入到模型中。\n目前支持 MPS 格式模型文件（后缀为 '.mps' 或 '.mps.gz'）、LP 格式模型文件（后缀为 '.lp' 或 '.lp.gz'）、SDPA 格式模型文件（后缀为 '.dat-s' 或 '.dat-s.gz'）、CBF 格式模型文件（后缀为 '.cbf' 或 '.cbf.gz'）、COPT 二进制格式文件（后缀为 '.bin'）、基解文件（后缀为 '.bas'）、结果文件（后缀为 '.sol'）、初始解文件（后缀为 '.mst'）和参数文件（后缀为 '.par'）。\n参量:\nfilename\n待读取文件的名称。",
+        "code": "# 读取MPS格式模型文件\nm.read('test.mps.gz')\n# 读取LP格式模型文件\nm.read('test.lp.gz')\n# 读取COPT二进制格式模型文件\nm.read('test.bin')\n# 读取基解文件\nm.read('testlp.bas')\n# 读取结果文件\nm.read('testmip.sol')\n# 读取初始解文件\nm.read('testmip.mst')\n# 读取参数设置文件\nm.read('test.par')"
+    },
+    {
+        "rowid": 20430,
+        "name": "Model.readMps()",
+        "description": "摘要: readMps(filename)\n描述: 按照 MPS 文件格式读取指定的文件到模型中。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照MPS文件格式读取文件\"test.mps.gz\"\nm.readMps('test.mps.gz')\n# 按照MPS文件格式读取文件\"test.lp.gz\"\nm.readMps('test.lp.gz')"
+    },
+    {
+        "rowid": 20431,
+        "name": "Model.readLp()",
+        "description": "摘要: readLp(filename)\n描述: 按照 LP 文件格式读取指定的文件到模型中。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照LP文件格式读取文件\"test.mps.gz\"\nm.readLp('test.mps.gz')\n# 按照LP文件格式读取文件\"test.lp.gz\"\nm.readLp('test.lp.gz')"
+    },
+    {
+        "rowid": 20432,
+        "name": "Model.readSdpa()",
+        "description": "摘要: readSdpa(filename)\n描述: 按照 SDPA 文件格式读取指定的文件到模型中。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照SDPA文件格式读取文件\"test.dat-s\"\nm.readSdpa('test.dat-s')"
+    },
+    {
+        "rowid": 20433,
+        "name": "Model.readCbf()",
+        "description": "摘要: readCbf(filename)\n描述: 按照 CBF 文件格式读取指定的文件到模型中。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照CBF文件格式读取文件\"test.cbf\"\nm.readCbf('test.cbf')"
+    },
+    {
+        "rowid": 20434,
+        "name": "Model.readBin()",
+        "description": "摘要: readBin(filename)\n描述: 按照 COPT 二进制文件格式读取指定的文件到模型中。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照COPT二进制文件格式读取文件\"test.bin\"\nm.readBin('test.bin')"
+    },
+    {
+        "rowid": 20435,
+        "name": "Model.readSol()",
+        "description": "摘要: readSol(filename)\n描述: 按照结果文件格式读取文件到模型中。\n注意：若读取成功，则读取的值将作为整数规划模型求解的一组初始解。文件中变量的取值可不完全指定（默认值为 0），若某变量的取值指定了多次，则采用最后一次指定的值。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照结果文件格式读取文件\"testmip.sol\"\nm.readSol('testmip.sol')\n# 按照结果文件格式读取文件\"testmip.txt\"\nm.readSol('testmip.txt')"
+    },
+    {
+        "rowid": 20436,
+        "name": "Model.readBasis()",
+        "description": "摘要: readBasis(filename)\n描述: 按照基解文件格式读取变量和线性约束的基状态到模型中，仅适用于线性规划模型。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照基解文件格式读取文件\"testmip.bas\"\nm.readBasis('testmip.bas')\n# 按照基解文件格式读取文件\"testmip.txt\"\nm.readBasis('testmip.txt')"
+    },
+    {
+        "rowid": 20437,
+        "name": "Model.readMst()",
+        "description": "摘要: readMst(filename)\n描述: 按照初始解文件格式读取初始解到模型中。\n注意：若读取成功，则读取的值将作为整数规划模型求解的一组初始解。文件中变量的取值可不完全指定，若某变量的取值指定了多次，则采用最后一次指定的值。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照初始解文件格式读取文件\"testmip.mst\"\nm.readMst('testmip.mst')\n# 按照初始解文件格式读取文件\"testmip.txt\"\nm.readMst('testmip.txt')"
+    },
+    {
+        "rowid": 20438,
+        "name": "Model.readParam()",
+        "description": "摘要: readParam(filename)\n描述: 按照参数文件格式读取优化参数到模型中。\n注意：若某优化参数的取值指定了多次，则采用最后一次指定的值。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照参数文件格式读取文件\"testmip.par\"\nm.readParam('testmip.par')\n# 按照参数文件格式读取文件\"testmip.txt\"\nm.readParam('testmip.txt')"
+    },
+    {
+        "rowid": 20439,
+        "name": "Model.readTune()",
+        "description": "摘要: readTune(filename)\n描述: 按照调优文件格式读取调优参数组合到模型中。\n参量:\nfilename\n待读取文件名。",
+        "code": "# 按照调优文件格式读取文件\"testmip.tune\"\nm.readTune('testmip.tune')\n# 按照调优文件格式读取文件\"testmip.txt\"\nm.readTune('testmip.txt')"
+    },
+    {
+        "rowid": 20440,
+        "name": "Model.write()",
+        "description": "摘要: write(filename)\n描述: 根据文件后缀名判断文件类型并写出到磁盘。\n目前支持 MPS 格式模型文件（后缀为 '.mps'）、LP 格式模型文件（后缀为 '.lp'）、CBF 格式模型文件（后缀为 '.cbf'）、COPT 二进制格式文件（后缀为 '.bin'）、基解文件（后缀为 '.bas'）、结果文件（后缀为 '.sol'）、初始解文件（后缀为 '.mst'）和参数文件（后缀为 '.par'）。\n参量:\nfilename\n待输出文件名。",
+        "code": "# 输出MPS格式模型文件\nm.write('test.mps')\n# 输出LP格式模型文件\nm.write('test.lp')\n# 输出COPT二进制格式模型文件\nm.write('test.bin')\n# 输出基解文件\nm.write('testlp.bas')\n# 输出结果文件\nm.write('testmip.sol')\n# 输出初始解文件\nm.write('testmip.mst')\n# 输出参数文件\nm.write('test.par')"
+    },
+    {
+        "rowid": 20441,
+        "name": "Model.writeMps()",
+        "description": "摘要: writeMps(filename)\n描述: 将当前模型输出到 MPS 格式模型文件中。\n参量:\nfilename\n待输出 MPS 格式模型文件名。",
+        "code": "# 输出MPS格式模型文件\"test.mps\"\nm.writeMps('test.mps')"
+    },
+    {
+        "rowid": 20442,
+        "name": "Model.writeMpsStr()",
+        "description": "摘要: writeMpsStr()\n描述: 将当前模型以 MPS 格式输出到缓存对象。",
+        "code": "# 将当前模型以MPS格式输出到缓存对象buff中并打印模型内容\nbuff = m.writeMpsStr()\nprint(buff.getData())"
+    },
+    {
+        "rowid": 20443,
+        "name": "Model.writeLp()",
+        "description": "摘要: writeLp(filename)\n描述: 将当前模型输出到 LP 格式模型文件中。\n参量:\nfilename\n待输出 LP 格式模型文件名。",
+        "code": "# 输出LP格式模型文件\"test.lp\"\nm.writeLp('test.lp')"
+    },
+    {
+        "rowid": 20444,
+        "name": "Model.writeCbf()",
+        "description": "摘要: writeCbf(filename)\n描述: 将当前模型输出到 CBF 格式模型文件中。\n参量:\nfilename\n待输出 CBF 格式模型文件名。",
+        "code": "# 输出CBF格式模型文件\"test.cbf\"\nm.writeCbf('test.cbf')"
+    },
+    {
+        "rowid": 20445,
+        "name": "Model.writeBin()",
+        "description": "摘要: writeBin(filename)\n描述: 将当前模型输出到 COPT 二进制格式模型文件中。\n参量:\nfilename\n待输出 COPT 二进制格式模型文件名。",
+        "code": "# 输出COPT二进制格式模型文件\"test.bin\"\nm.writeBin('test.bin')"
+    },
+    {
+        "rowid": 20446,
+        "name": "Model.writeIIS()",
+        "description": "摘要: writeIIS(filename)\n描述: 将当前最小冲突模型写入 IIS 格式模型文件中。\n参量:\nfilename\n待输出 IIS 格式模型文件名。",
+        "code": "# 输出IIS格式模型文件\"test.iis\"\nm.writeIIS('test.iis')"
+    },
+    {
+        "rowid": 20447,
+        "name": "Model.writeRelax()",
+        "description": "摘要: writeRelax(filename)\n描述: 将可行化松弛模型输出到 Relax 格式模型文件中。\n参量:\nfilename\n待输出 Relax 格式模型文件名。",
+        "code": "# 输出Relax格式模型文件\"test.relax\"\nm.writeRelax('test.relax')"
+    },
+    {
+        "rowid": 20448,
+        "name": "Model.writeSol()",
+        "description": "摘要: writeSol(filename)\n描述: 将模型的结果输出到结果文件中。\n参量:\nfilename\n待输出结果文件名。",
+        "code": "# 输出结果文件\"test.sol\"\nm.writeSol('test.sol')"
+    },
+    {
+        "rowid": 20449,
+        "name": "Model.writePoolSol()",
+        "description": "摘要: writePoolSol(isol, filename)\n描述: 将指定的解池中的解写到文件中。\n参量:\nisol\n解池中解的索引。\nfilename\n待输出结果文件名。",
+        "code": "# 输出解池中第1组解到结果文件\"poolsol_1.sol\"\nm.writePoolSol(1, 'poolsol_1.sol')"
+    },
+    {
+        "rowid": 20450,
+        "name": "Model.writeBasis()",
+        "description": "摘要: writeBasis(filename)\n描述: 将线性规划模型的基解输出到基解文件中。\n参量:\nfilename\n待输出基解文件名。",
+        "code": "# 输出基解文件\"testlp.bas\"\nm.writeBasis('testlp.bas')"
+    },
+    {
+        "rowid": 20451,
+        "name": "Model.writeMst()",
+        "description": "摘要: writeMst(filename)\n描述: 对于整数规划模型，输出当前最好整数解到初始解文件中。若没有整数解，则输出模型中存储的第一组初始解。\n参量:\nfilename\n待输出初始解文件名。",
+        "code": "# 输出初始解文件\"testmip.mst\"\nm.writeMst('testmip.mst')"
+    },
+    {
+        "rowid": 20452,
+        "name": "Model.writeParam()",
+        "description": "摘要: writeParam(filename)\n描述: 输出与默认参数值不相同的参数到参数文件中。\n参量:\nfilename\n待输出参数文件名。",
+        "code": "# 输出参数文件\"testmip.par\"\nm.writeParam('testmip.par')"
+    },
+    {
+        "rowid": 20453,
+        "name": "Model.writeTuneParam()",
+        "description": "摘要: writeTuneParam(idx, filename)\n描述: 输出指定编号的参数调优结果到参数文件中。\n参量:\nidx: 参数调优结果编号。\nfilename: 待输出参数文件名。",
+        "code": "# 输出指定编号的参数调优结果到参数文件\"testmip.par\"\nm.writeTuneParam(0, 'testmip.par')"
+    },
+    {
+        "rowid": 20454,
+        "name": "Model.setLogFile()",
+        "description": "摘要: setLogFile(logfile)\n描述: 设置求解器日志文件。\n参量:\nlogfile: 日志文件。",
+        "code": "# 设置日志文件为\"copt.log\"\nm.setLogFile('copt.log')"
+    },
+    {
+        "rowid": 20455,
+        "name": "Model.setLogCallback()",
+        "description": "摘要: setLogCallback(logcb)\n描述: 设置求解日志回调函数。\n参量:\nlogcb: 求解日志回调函数。",
+        "code": "# 设置日志回调函数为Python函数'logcbfun'\nm.setLogCallback(logcbfun)"
+    },
+    {
+        "rowid": 20456,
+        "name": "Model.solve()",
+        "description": "摘要: solve()\n描述: 求解优化模型。",
+        "code": "# 求解优化模型\nm.solve()"
+    },
+    {
+        "rowid": 20457,
+        "name": "Model.solveLP()",
+        "description": "摘要: solveLP()\n描述: 求解线性规划模型。若是整数规划模型，则当作线性规划模型求解。",
+        "code": "# 调用线性规划求解器求解模型\nm.solveLP()"
+    },
+    {
+        "rowid": 20458,
+        "name": "Model.computeIIS()",
+        "description": "摘要: computeIIS()\n描述: 计算不可行模型的 IIS。",
+        "code": "# 计算不可行模型的IIS\nm.computeIIS()"
+    },
+    {
+        "rowid": 20459,
+        "name": "Model.feasRelax()",
+        "description": "摘要: feasRelax(vars, lbpen, ubpen, constrs, rhspen, uppen=None)\n描述: 计算不可行模型的可行化松弛。\n参量:\nvars: 待松弛变量。\nlbpen: 变量下界的惩罚因子。若为 None，则表示不松弛下界；若惩罚因子为 COPT.INFINITY，则表示不松弛相应的变量下界。\nubpen: 变量上界的惩罚因子。若为 None，则表示不松弛上界；若惩罚因子为 COPT.INFINITY，则表示不松弛相应的变量上界。\nconstrs: 待松弛约束。\nrhspen: 约束边界的惩罚因子。若为 None，则表示不松弛约束边界；若惩罚因子为 COPT.INFINITY，则表示不松弛相应的约束边界。\nuppen: 若约束存在双边约束，则表示约束上界的惩罚因子。若为 None，则惩罚因子由 rhspen 指定；若惩罚因子为 COPT.INFINITY，则表示不松弛相应的约束上界。",
+        "code": "# 计算不可行模型的可行化松弛\nm.feasRelax(vars, lbpen, ubpen, constrs, rhspen)"
+    },
+    {
+        "rowid": 20460,
+        "name": "Model.feasRelaxS()",
+        "description": "摘要: feasRelaxS(vrelax, crelax)\n描述: 计算不可行模型的可行化松弛。\n参量:\nvrelax: 是否松弛变量。\ncrelax: 是否松弛约束。",
+        "code": "# 计算不可行模型的可行化松弛\nm.feasRelaxS(True, True)"
+    },
+    {
+        "rowid": 20461,
+        "name": "Model.tune()",
+        "description": "摘要: tune()\n描述: 对模型进行参数调优。",
+        "code": "# 对模型进行参数调优\nm.tune()"
+    },
+    {
+        "rowid": 20462,
+        "name": "Model.loadTuneParam()",
+        "description": "摘要: loadTuneParam(idx)\n描述: 加载指定编号的参数调优结果到模型。",
+        "code": "# 加载最佳参数调优结果到模型中\nm.loadTuneParam(0)"
+    },
+    {
+        "rowid": 20463,
+        "name": "Model.interrupt()",
+        "description": "摘要: interrupt()\n描述: 中断当前求解的模型。",
+        "code": "# 中断当前求解的模型\nm.interrupt()"
+    },
+    {
+        "rowid": 20464,
+        "name": "Model.remove()",
+        "description": "摘要: remove(args)\n描述: 从模型中移除变量或约束。\n若移除变量，则参数 args 可取值为Var 类 对象、VarArray 类 对象、列表、字典或tupledict 类 对象；\n若移除线性约束，则参数 args 可取值为Constraint 类 对象、ConstrArray 类 对象、列表、字典或tupledict 类 对象；\n若移除 SOS 约束，则参数 args 可取值为SOS 类 对象、SOSArray 类 对象、列表、字典或tupledict 类 对象；\n若移除二阶锥约束，则参数 args 可取值为Cone 类 对象、ConeArray 类 对象、列表、字典或tupledict 类 对象；\n若移除指数锥约束，则参数 args 可取值为ExpCone 类 对象、ExpConeArray 类 对象、列表、字典或tupledict 类 对象；\n若移除二次约束，则参数 args 可取值为QConstraint 类 对象、QConstrArray 类 对象、列表、字典或tupledict 类 对象；\n若移除半定约束，则参数 args 可取值为PsdConstraint 类 对象、PsdConstrArray 类 对象、列表、字典或tupledict 类 对象；\n若移除 Indicator 约束，则参数 args 可取值为GenConstr 类 对象、GenConstrArray 类 对象、列表、字典或tupledict 类 对象；\n若移除 LMI 约束，则参数 args 可取值为LmiConstraint 类 对象、LmiConstrArray 类 对象、列表、字典或tupledict 类 对象；\n若移除仿射锥约束，则参数 args 可取值为AffineCone 类 对象、AffineConeArray 类 对象；\n若移除矩阵变量或矩阵约束，则参数 args 可取值为MVar 类 对象、MConstr 类 对象、MQConstr 类 对象、MPsdConstr 类 对象。\n参量:\nargs: 待移除变量或约束。",
+        "code": "# 移除线性约束conx\nm.remove(conx)\n# 移除变量x和y\nm.remove([x, y])"
+    },
+    {
+        "rowid": 20465,
+        "name": "Model.reset()",
+        "description": "摘要: reset()\n描述: 重置模型求解结果信息。",
+        "code": "# 重置模型求解结果信息\nm.reset()"
+    },
+    {
+        "rowid": 20466,
+        "name": "Model.resetAll()",
+        "description": "摘要: resetAll()\n描述: 重置模型的求解结果以及其他额外信息，如初始解、IIS 等。执行该函数后，模型需要计算的信息都会被清空，只剩下原始模型本身（即变量、目标和约束被保留）。",
+        "code": "# 重置模型的求解结果及其他额外信息\nm.resetAll()"
+    },
+    {
+        "rowid": 20467,
+        "name": "Model.clear()",
+        "description": "摘要: clear()\n描述: 清空整个模型。执行该函数后，模型中的全部内容都会被清空，包括此前添加的变量、目标和约束。",
+        "code": "# 清空整个模型\nm.clear()"
+    },
+    {
+        "rowid": 20468,
+        "name": "Model.clone()",
+        "description": "摘要: clone()\n描述: 创建模型的深拷贝，返回一个Model 类 对象。",
+        "code": "# 创建模型的深拷贝\nmcopy = m.clone()"
+    },
+    {
+        "rowid": 20469,
+        "name": "Model.setCallback()",
+        "description": "Synopsis: setCallback(cb, cbctx)\nDescription: 在 COPT 模型中，设置用户自定义的回调。\nArguments:\ncb: 用户自定义的回调类对象，继承CallbackBase 类 。\ncbctx: 回调的触发条件，可取值详见Callback context 。",
+        "code": "cb = CoptCallback()\nmodel.setCallback(cb, COPT.CBCONTEXT_MIPSOL)"
+    },
+    {
+        "rowid": 20501,
+        "name": "Var.getType()",
+        "description": "摘要: getType()\n描述: 获取变量的类型。",
+        "code": "# 获取变量v的类型\nvtype = v.getType()"
+    },
+    {
+        "rowid": 20502,
+        "name": "Var.getName()",
+        "description": "摘要: getName()\n描述: 获取变量的名字。",
+        "code": "# 获取变量v的名字\nvarname = v.getName()"
+    },
+    {
+        "rowid": 20503,
+        "name": "Var.getBasis()",
+        "description": "摘要: getBasis()\n描述: 获取变量的基状态。",
+        "code": "# 获取变量v的基状态\nvarbasis = v.getBasis()"
+    },
+    {
+        "rowid": 20504,
+        "name": "Var.getLowerIIS()",
+        "description": "摘要: getLowerIIS()\n描述: 获取变量下边界的 IIS 状态。",
+        "code": "# 获取变量v下边界的IIS状态\nlowerIIS = v.getLowerIIS()"
+    },
+    {
+        "rowid": 20505,
+        "name": "Var.getUpperIIS()",
+        "description": "摘要: getUpperIIS()\n描述: 获取变量上边界的 IIS 状态。",
+        "code": "# 获取变量v上边界的IIS状态\nupperIIS = v.getUpperIIS()"
+    },
+    {
+        "rowid": 20506,
+        "name": "Var.getIdx()",
+        "description": "摘要: getIdx()\n描述: 获取变量在系数矩阵中的下标。",
+        "code": "# 获取变量v的下标\nvindex = v.getIdx()"
+    },
+    {
+        "rowid": 20507,
+        "name": "Var.setType()",
+        "description": "摘要: setType(newtype)\n描述: 设置变量的类型。\n参量:\n  newtype: 变量的新类型。可取值详见变量类型 部分。",
+        "code": "# 设置变量v的类型\nv.setType(COPT.BINARY)"
+    },
+    {
+        "rowid": 20508,
+        "name": "Var.setName()",
+        "description": "摘要: setName(newname)\n描述: 设置变量的名称。\n参量:\n  newname: 变量的新名称。",
+        "code": "# 设置变量v的名称\nv.setName('v')"
+    },
+    {
+        "rowid": 20509,
+        "name": "Var.getInfo()",
+        "description": "摘要: getInfo(infoname)\n描述: 获取变量指定的信息值，返回一个常数。\n参量:\n  infoname: 待获取信息名。可取值详见信息 部分。",
+        "code": "# 获取变量x的下界\nlb = x.getInfo(COPT.Info.LB)"
+    },
+    {
+        "rowid": 20510,
+        "name": "Var.setInfo()",
+        "description": "摘要: setInfo(infoname, newval)\n描述: 给变量设置新的信息值。\n参量:\n  infoname: 待设置信息名。可取值详见信息 部分。\n  newval: 待设置新信息值。",
+        "code": "# 设置变量x的下界\nx.setInfo(COPT.Info.LB, 1.0)"
+    },
+    {
+        "rowid": 20511,
+        "name": "Var.remove()",
+        "description": "摘要: remove()\n描述: 从模型中删除当前变量。",
+        "code": "# 删除变量x\nx.remove()"
+    },
+    {
+        "rowid": 20601,
+        "name": "VarArray()",
+        "description": "摘要: VarArray(vars=None)\n描述: 创建一个VarArray 类 对象。\n若参数 vars 为 None，则创建一个空的VarArray 类 对象，否则以参数 vars 初始化新创建的VarArray 类 对象。\n参量:\n  vars: 待添加变量。可选参量，默认为 None。可取值为Var 类 对象、VarArray 类 对象、列表、字典或tupledict 类 对象。",
+        "code": "# 创建一个空的VarArray类对象\nvararr = VarArray()\n# 创建一个VarArray类对象，并使用变量x和y初始化\nvararr = VarArray([x, y])"
+    },
+    {
+        "rowid": 20602,
+        "name": "VarArray.pushBack()",
+        "description": "摘要: pushBack(var)\n描述: 添加单个或多个Var 类 对象。\n参量:\n  var: 待添加变量。可取值为Var 类 对象、VarArray 类 对象、列表、字典或tupledict 类 对象。",
+        "code": "# 添加变量x到vararr中\nvararr.pushBack(x)\n# 添加变量x和y到vararr中\nvararr.pushBack([x, y])"
+    },
+    {
+        "rowid": 20603,
+        "name": "VarArray.getVar()",
+        "description": "摘要: getVar(idx)\n描述: 根据变量在VarArray 类 对象中的下标获取相应的变量，返回一个Var 类 对象。\n参量:\n  idx: 变量在VarArray 类 对象中的下标。起始为 0。",
+        "code": "# 获取vararr中下标为1的变量\nvar = vararr.getVar(1)"
+    },
+    {
+        "rowid": 20604,
+        "name": "VarArray.getAll()",
+        "description": "摘要: getAll()\n描述: 获取VarArray 类 对象中的的全部变量，返回一个列表对象。",
+        "code": "# 获取vararr中的全部变量\nvarall = vararr.getAll()"
+    },
+    {
+        "rowid": 20605,
+        "name": "VarArray.getSize()",
+        "description": "摘要: getSize()\n描述: 获取VarArray 类 对象中元素的个数。",
+        "code": "# 获取vararr中变量的个数\narrsize = vararr.getSize()"
+    },
+    {
+        "rowid": 20701,
+        "name": "PsdVar.getName()",
+        "description": "摘要: getName()\n描述: 获取半定变量的名字。",
+        "code": "# 获取半定变量v的名字\nvarname = v.getName()"
+    },
+    {
+        "rowid": 20702,
+        "name": "PsdVar.getIdx()",
+        "description": "摘要: getIdx()\n描述: 获取半定变量在模型中的下标。",
+        "code": "# 获取半定变量v的下标\nvindex = v.getIdx()"
+    },
+    {
+        "rowid": 20703,
+        "name": "PsdVar.getDim()",
+        "description": "摘要: getDim()\n描述: 获取半定变量的维度。",
+        "code": "# 获取半定变量v的维度\nvdim = v.getDim()"
+    },
+    {
+        "rowid": 20704,
+        "name": "PsdVar.getLen()",
+        "description": "摘要: getLen()\n描述: 获取半定变量展开后的长度。",
+        "code": "# 获取半定变量v展开后的长度\nvlen = v.getLen()"
+    },
+    {
+        "rowid": 20705,
+        "name": "PsdVar.setName()",
+        "description": "摘要: setName(newname)\n描述: 设置半定变量的名称。\n参量:\n  newname: 半定变量的新名称。",
+        "code": "# 设置半定变量v的名称\nv.setName('v')"
+    },
+    {
+        "rowid": 20706,
+        "name": "PsdVar.getInfo()",
+        "description": "摘要: getInfo(infoname)\n描述: 获取半定变量指定的信息值，返回一个列表。\n参量:\n  infoname: 待获取信息名。可取值详见信息 部分。",
+        "code": "# 获取半定变量x的取值\nsol = x.getInfo(COPT.Info.Value)"
+    },
+    {
+        "rowid": 20707,
+        "name": "PsdVar.remove()",
+        "description": "摘要: remove()\n描述: 从模型中删除当前半定变量。",
+        "code": "# 删除半定变量x\nx.remove()"
+    },
+    {
+        "rowid": 20708,
+        "name": "PsdVar.diag()",
+        "description": "摘要: diag(offset=0)\n描述: 获取半定变量的对角元。\n参量:\n  offset: 对角偏移量，默认值为 0。\n    若 offset 大于 0，则表示向下三角偏移；若 offset 小于 0，则表示向上三角偏移。\n返回值: PsdExpr 对象。",
+        "code": "# 获取半定变量主对角元\nv.diag(offset=0)"
+    },
+    {
+        "rowid": 20709,
+        "name": "PsdVar.pick()",
+        "description": "摘要: pick(indexes)\n描述: 获取半定变量中由指定下标构成的半定表达式。\n参量:\n  indexes: 指定的下标数组。\n返回值: PsdExpr 对象。",
+        "code": "# 获取半定变量中下标为0的元素构成的半定表达式\nbarX = model.addPsdVars(3, \"BAR_X\")\nbarX.pick([0])"
+    },
+    {
+        "rowid": 20710,
+        "name": "PsdVar.sum()",
+        "description": "摘要: sum()\n描述: 获取半定变量全部项相加构成的半定表达式。\n返回值: PsdExpr 对象。",
+        "code": ""
+    },
+    {
+        "rowid": 20711,
+        "name": "PsdVar.toexpr()",
+        "description": "摘要: toexpr()\n描述: 获取半定变量等价的半定表达式。\n返回值: PsdExpr 对象。",
+        "code": ""
+    },
+    {
+        "rowid": 20712,
+        "name": "PsdVar.shape",
+        "description": "摘要: shape\n描述: PsdVar 对象的形状。\n返回值: 整型元组。",
+        "code": ""
+    },
+    {
+        "rowid": 20713,
+        "name": "PsdVar.size",
+        "description": "摘要: size\n描述: PsdVar 对象的形状。\n返回值: 整型元组。",
+        "code": ""
+    },
+    {
+        "rowid": 20714,
+        "name": "PsdVar.dim",
+        "description": "摘要: dim\n描述: PsdVar 对象的维度。\n返回值: 整型值。",
+        "code": ""
+    },
+    {
+        "rowid": 20715,
+        "name": "PsdVar.len",
+        "description": "摘要: len\n描述: PsdVar 对象展开后的长度。\n返回值: 整型值。",
+        "code": ""
     }
 ]

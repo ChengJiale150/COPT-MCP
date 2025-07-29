@@ -60,9 +60,9 @@ COPT-MCP旨在为大模型提供COPT求解器的相关接口的最小可行文�
 
 ### 环境要求
 
-- Python 3.11+
-- FastMCP 2.10.6+
-- uv
+- Python 3.12+
+- FastMCP
+- uv （推荐，用于版本管理）
 
 ### 安装步骤
 

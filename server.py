@@ -71,19 +71,16 @@ def get_api_doc(instructions: str, language: str, domain: str,
         instructions: 查询指令,支持自然语言描述与代码片段的查询,参考的查询指令如下：
             - "name": 查询API名称,如"Model.addConstr()"/"Envr()"
             - "description": 查询需求描述,如"使用矩阵建模添加一组线性约束"
-            - "code": 相似的代码片段(可多行),如"model.addConstr(x + y <= 1)\nmodel.addConstr(x + y <= 2)"
         language: API接口语言,目前支持的语言如下：
             - "Python": Python接口
         domain: 查询指令对应的字段,目前支持的领域如下：
             - "name": 查询API名称
             - "description": 查询API描述
-            - "code": 查询API代码示例
         recall_num: 查询召回数量,默认为3,最大为10
     
     Hints:
-        - 在希望精准查询特定API时，推荐使用"name"字段进行查询
-        - 在希望根据需求描述模糊查询时，推荐使用"description"字段进行查询
-        - 在希望根据代码片段模糊查询或者一次性召回多个API时，推荐使用"code"字段进行查询
+        - 在希望精准查询特定API时，推荐选择"name"字段
+        - 在希望根据需求描述模糊查询时，推荐选择"description"字段
     """
     dim_map = config["dim_map"]
 

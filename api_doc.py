@@ -19,34 +19,45 @@ def create_api_doc_table(db):
     db.execute("CREATE TABLE api_doc (rowid INTEGER PRIMARY KEY, name TEXT, description TEXT, code TEXT)")
 
 def insert_api_doc(db, item):
-    # 并发获取所有 embedding
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        name_future = executor.submit(get_embedding, env, item["name"], dim_map["name"])
-        description_future = executor.submit(get_embedding, env, item["description"], dim_map["description"])
-        code_future = executor.submit(get_embedding, env, item["code"], dim_map["code"])
-        
-        # 等待所有 embedding 完成
-        name_embedding = name_future.result()
-        description_embedding = description_future.result()
-        code_embedding = code_future.result()
+    # 检查哪些字段不为空，只对非空字段获取 embedding
+    embedding_tasks = {}
     
-    # 串行插入数据库（保证数据一致性）
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        if item["name"]:  # 只有非空时才获取embedding
+            embedding_tasks["name"] = executor.submit(get_embedding, env, item["name"], dim_map["name"])
+        if item["description"]:
+            embedding_tasks["description"] = executor.submit(get_embedding, env, item["description"], dim_map["description"])
+        if item["code"]:
+            embedding_tasks["code"] = executor.submit(get_embedding, env, item["code"], dim_map["code"])
+        
+        # 等待所有提交的embedding任务完成
+        embeddings = {}
+        for field, future in embedding_tasks.items():
+            embeddings[field] = future.result()
+    
+    # 插入主表（包括空值）
     db.execute(
         "INSERT INTO api_doc(rowid, name, description, code) VALUES (?, ?, ?, ?)",
         [item["rowid"], item["name"], item["description"], item["code"]]
     )
-    db.execute(
-        "INSERT INTO name_vec(rowid, embedding) VALUES (?, ?)",
-        [item["rowid"], name_embedding]
-    )
-    db.execute(
-        "INSERT INTO description_vec(rowid, embedding) VALUES (?, ?)",
-        [item["rowid"], description_embedding]
-    )
-    db.execute(
-        "INSERT INTO code_vec(rowid, embedding) VALUES (?, ?)",
-        [item["rowid"], code_embedding]
-    )
+    
+    # 只插入非空字段对应的embedding向量表
+    if "name" in embeddings:
+        db.execute(
+            "INSERT INTO name_vec(rowid, embedding) VALUES (?, ?)",
+            [item["rowid"], embeddings["name"]]
+        )
+    if "description" in embeddings:
+        db.execute(
+            "INSERT INTO description_vec(rowid, embedding) VALUES (?, ?)",
+            [item["rowid"], embeddings["description"]]
+        )
+    if "code" in embeddings:
+        db.execute(
+            "INSERT INTO code_vec(rowid, embedding) VALUES (?, ?)",
+            [item["rowid"], embeddings["code"]]
+        )
+    
     db.commit()
 
 
