@@ -65,7 +65,7 @@ def get_reference(problem_type: str, language: str) -> str:
 def get_api_doc(instructions: str, language: str, domain: str,
                 recall_num: int = 3) -> str:
     """
-    根据查询指令召回最相似的API文档
+    根据查询指令召回最相似的API文档,在你不清楚COPT的相关API用法时,可以调用此工具
     
     Args:
         instructions: 查询指令,支持自然语言描述与代码片段的查询,参考的查询指令如下：

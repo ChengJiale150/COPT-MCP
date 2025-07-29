@@ -4,7 +4,7 @@
 
 # COPT-MCP 🚀
 
-<strong>基于杉树科技开发的COPT求解器的MCP服务，提供专门为大语言模型设计的文档和示例</strong>
+<strong>基于杉数科技开发的COPT求解器的MCP服务，提供专门为大语言模型设计的文档和示例</strong>
 
 *由 [ChengJiale150](https://github.com/ChengJiale150) 开发*
 
@@ -26,6 +26,7 @@
 - [安装与使用](#-安装与使用)
 - [详细介绍](#-详细介绍)
 - [贡献指南](#-贡献指南)
+- [更新日志](#-更新日志)
 - [致谢](#-致谢)
 - [联系我们](#-联系我们)
 
@@ -44,7 +45,7 @@ COPT-MCP旨在为大模型提供COPT求解器的相关接口的最小可行文�
 - 🔧 **多类型支持**: 支持多种规划问题与编程语言
 - 📚 **丰富的示例库**: 提供详细的代码示例和API说明
 - 📖 **学术引用支持**: 提供Word和BibTeX格式的引用模板
-- 🔌 **MCP协议**: 标准化的AI助手集成接口，支持多种大模型与客户端
+- 🔌 **MCP协议**: 通过MCP协议方便与各类大模型与Agent嵌入集成
 - 🚀 **轻量化部署**: 无需安装额外软件，仅需Python虚拟环境
 - 📝 **中文文档**: 完整的中文文档和示例说明
 
@@ -80,25 +81,46 @@ pip install uv
 uv sync
 ```
 
-3. **运行MCP服务**
+3. **配置环境变量**
+
+在.env文件中配置嵌入模型的EMB_URL和EMB_API_KEY,这里默认使用的是[硅基流动](https://cloud.siliconflow.cn/i/5JAHVbNN)的嵌入模型(Qwen3-Embedding-8B)
+
+```
+EMB_URL=https://api.siliconflow.cn/v1/embeddings
+EMB_API_KEY=<your_api_key>
+```
+
+4. **运行MCP服务**
 
 ```bash
-uv run server.py
+uv run fastmcp run server.py
 ```
 
 ### 在客户端中集成
 
-在支持MCP的客户端配置文件中添加：
+你可以使用FastMCP自动集成该MCP服务,具体详见[MCP集成文档](https://gofastmcp.com/integrations/anthropic),这里以使用FastMCP在Cursor中集成为例：
+
+```bash
+fastmcp install cursor server.py
+```
+
+或者也可以在支持MCP的客户端配置文件中手动添加：
 
 ```json
 {
   "mcpServers": {
     "copt-mcp": {
-      "command": "python",
-      "args": ["/path/to/COPT-MCP/server.py"],
-      "env": {
-        "COPT_LICENSE": "/path/to/your/copt.lic"
-      }
+      "command": "uv",
+      "args": [
+        "run",
+        "--with", "fastmcp",
+        "--with", "requests",
+        "--with", "sqlite_vec",
+        "fastmcp", "run", 
+        "your/path/to/COPT-MCP/server.py"
+      ],
+      "env": {},
+      "transport": "stdio"
     }
   }
 }
@@ -122,17 +144,10 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 
 **返回**: 对应格式的引用文本
 
-**使用示例**:
+**使用说明**:
 
-```python
-# 获取Word格式引用
-word_citation = get_citation("word")
-# 返回: [1] D. Ge, Q. Huangfu, Z. Wang, J. Wu and Y. Ye. Cardinal Optimizer (COPT) user guide. https://guide.coap.online/copt/en-doc, 2023.
-
-# 获取BibTeX格式引用
-bibtex_citation = get_citation("bibtex")
-# 返回: @misc{copt, author={Dongdong Ge and Qi Huangfu and Zizhuo Wang and Jian Wu and Yinyu Ye}, title={Cardinal {O}ptimizer {(COPT)} user guide}, howpublished={https://guide.coap.online/copt/en-doc}, year=2023}
-```
+- 当用户需要在其学术论文中引用COPT求解器时，AI助手可以调用`get_citation`工具，并传入`"word"`或`"bibtex"`参数，获取对应格式的引用文本。
+- 引用对应的格式文本位于`resource/citation`文件夹中，可以自行查看并修改。
 
 ### 获取参考示例
 
@@ -142,85 +157,45 @@ bibtex_citation = get_citation("bibtex")
 
 **参数**:
 
-- `problem_type` (str): 求解问题类型
+- `problem_type` (str): 求解问题类型(目前仅支持以下类型)
   - `"LP"`: 线性规划 (Linear Programming)
   - `"MIP"`: 混合整数规划 (Mixed Integer Programming)
   - `"SOCP"`: 二阶锥规划 (Second-Order Cone Programming)
-- `language` (str): API接口语言
-  - `"Python"`: Python接口 (目前唯一支持的语言)
+- `language` (str): API接口语言(目前仅支持以下类型)
+  - `"Python"`: Python接口
 
 **返回**: 包含数学定义、代码示例和详细注释的Markdown格式文档
 
-**使用示例**:
+**使用说明**:
+- 当用户需要解决COPT求解器相关问题时，AI助手会优先调用`get_reference`工具，并传入`problem_type`和`language`参数，获取对应问题的参考示例,利用大模型良好的Few Shot理解能力,降低模型幻觉,提高模型使用COPT求解器的准确性。
+- 参考示例代码位于`resource/example/{problem_type}/{language}.md`文件中，可以自行查看并修改,也可以根据需要添加更多示例。
 
-```python
-# 获取线性规划Python示例
-lp_example = get_reference("LP", "Python")
+### 获取API文档
 
-# 获取混合整数规划Python示例
-mip_example = get_reference("MIP", "Python")
+**工具名称**: `get_api_doc`
 
-# 获取二阶锥规划Python示例
-socp_example = get_reference("SOCP", "Python")
-```
+**功能**: 根据查询指令召回最相似的API文档
 
-## 📚 使用示例
+**参数**:
 
-### 示例1: 获取学术引用
+- `instructions` (str): 查询指令,支持自然语言描述与代码片段的查询,参考的查询指令如下：
+  - `"name"`: 查询API名称,如"Model.addConstr()"/"Envr()"
+  - `"description"`: 查询需求描述,如"使用矩阵建模添加一组线性约束"
+- `language` (str): API接口语言(目前仅支持以下类型)
+  - `"Python"`: Python接口
+- `domain` (str): 查询指令对应的字段,目前支持的领域如下：
+  - `"name"`: 查询API名称
+  - `"description"`: 查询API描述
+- `recall_num` (int): 查询召回数量,默认为3,最大为10
 
-当用户需要在其学术论文中引用COPT求解器时，AI助手可以调用：
+**返回**: 包含API名称、描述、示例代码的Markdown格式文档
 
-```python
-# 获取Word格式引用
-citation = get_citation("word")
-print("请在您的论文中使用以下引用格式：")
-print(citation)
-```
+**使用说明**:
 
-### 示例2: 解决线性规划问题
-
-当用户需要解决线性规划问题时，AI助手可以：
-
-1. 首先获取参考示例：
-   
-   ```python
-   example = get_reference("LP", "Python")
-   print("以下是线性规划问题的完整解决方案：")
-   print(example)
-   ```
-
-2. 根据用户的具体问题，基于示例代码进行定制化修改
-
-### 示例3: 解决混合整数规划问题
-
-对于需要整数决策变量的问题：
-
-```python
-# 获取MIP示例
-mip_example = get_reference("MIP", "Python")
-print("混合整数规划问题解决方案：")
-print(mip_example)
-```
-
-## 🎯 支持的问题类型
-
-### 1. 线性规划 (LP)
-
-- **适用场景**: 生产计划、资源分配、运输优化等
-- **特点**: 所有变量为连续变量，目标函数和约束条件均为线性
-- **示例**: 生产与库存计划优化
-
-### 2. 混合整数规划 (MIP)
-
-- **适用场景**: 设施选址、调度问题、投资组合优化等
-- **特点**: 包含连续变量和整数变量
-- **示例**: 0-1背包问题、设施选址问题
-
-### 3. 二阶锥规划 (SOCP)
-
-- **适用场景**: 投资组合优化、信号处理、机器学习等
-- **特点**: 包含二阶锥约束，可处理非线性优化问题
-- **示例**: 投资组合风险优化
+- 当大模型不清楚COPT求解器的相关API时，会优先调用`get_api_doc`工具，并传入`instructions`、`language`、`domain`和`recall_num`参数，获取对应API的文档。
+- 数据来源为COPT求解器的官方文档，通过嵌入模型召回最相似的API文档，并返回给大模型。
+- 数据存储在`resource/api_doc/{language}`文件夹中，分别存储为JSON格式(原始数据,用于用户查看)与db格式(用于模型查询)。
+- 由于API文档数量较多，目前尚不完善,已完成的API文档详见TODO.md,后续会持续更新,欢迎大家贡献更多API文档。
 
 ## 🤝 贡献指南
 
@@ -235,23 +210,48 @@ print(mip_example)
 ### 贡献类型
 
 - 🐛 Bug修复
+- 📝 旧功能完善
 - ✨ 新功能开发
 - 📚 文档改进
 - 🧪 测试用例添加
 - 🌍 国际化支持
 
-## 🔗 相关链接
+## 📝 更新日志
 
-- [COPT官网](https://www.coap.online/copt)
-- [COPT用户指南](https://guide.coap.online/copt/en-doc)
-- [FastMCP文档](https://gofastmcp.com)
-- [MCP协议规范](https://modelcontextprotocol.io/)
+### 最新信息
+
+- **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
+
+### 历史信息
+
+- **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
+
+
+## 🤗 致谢
+
+本项目的成立与完成离不开下述诸位的无私帮助,没有他们就没有COPT-MCP的诞生,在此表示衷心的感谢：
+
+- [杉数科技](https://www.cardopt.com/): 感谢杉数科技开发了COPT求解器,并提供了详尽的官方文档,没有COPT求解器就没有COPT-MCP的诞生
+- [FastMCP](https://gofastmcp.com/): 感谢FastMCP的开发者们,没有FastMCP就没有COPT-MCP的快速集成
+- [Claude Code](https://github.com/anthropics/claude-code): 感谢Claude Code, TA是我使用过的最强大的AI编程助手,没有TA就没有COPT-MCP的快速开发
+- [Cursor](https://www.cursor.com/): 感谢Cursor, TA才是本篇README的第一作者,没有TA就没有COPT-MCP文档的快速完成
+
+此外,还要感谢杉数COPT求解器交流2群(群号:142636109)的各位大佬,大家的讨论给了我很多启发,让我对COPT求解器有了更深入的理解,在此表示衷心的感谢。
+
+最后,感谢各位使用COPT-MCP,如果有什么问题或者建议,欢迎随时联系我,我会尽快回复。
 
 ## 📞 联系我们
 
-- 杉树科技官网: https://www.coap.online/
-- 技术支持: support@coap.online
-- GitHub Issues: [提交问题](https://github.com/your-username/COPT-MCP/issues)
+- 个人邮箱: cjl3473383542@163.com
+- 学校邮箱: 2023110603@stu.sufe.edu.cn(两种邮箱均可)
+- GitHub Issues: [提交问题](https://github.com/ChengJiale150/COPT-MCP/issues)
+
+### 相关链接
+
+- [COPT求解器](https://www.cardopt.com/solver)
+- [COPT文档](https://pub.shanshu.ai/cardinalsite_v2/video/20250623/copt-userguide_cn.pdf)
+- [FastMCP](https://gofastmcp.com)
+- [MCP协议](https://modelcontextprotocol.io/)
 
 ---
 
