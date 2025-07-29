@@ -12,6 +12,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 [English](./docs/README_EN.md) | 中文
 
@@ -68,14 +69,14 @@ COPT-MCP旨在为大模型提供COPT求解器的相关接口的最小可行文�
 ### 安装步骤
 
 1. **克隆项目**
-   
+
 ```bash
 git clone https://github.com/ChengJiale150/COPT-MCP.git
 cd COPT-MCP
 ```
 
 2. **安装依赖**
-   
+
 ```bash
 pip install uv
 uv sync
@@ -167,6 +168,7 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 **返回**: 包含数学定义、代码示例和详细注释的Markdown格式文档
 
 **使用说明**:
+
 - 当用户需要解决COPT求解器相关问题时，AI助手会优先调用`get_reference`工具，并传入`problem_type`和`language`参数，获取对应问题的参考示例,利用大模型良好的Few Shot理解能力,降低模型幻觉,提高模型使用COPT求解器的准确性。
 - 参考示例代码位于`resource/example/{problem_type}/{language}.md`文件中，可以自行查看并修改,也可以根据需要添加更多示例。
 
@@ -226,7 +228,6 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 
 - **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
 
-
 ## 🤗 致谢
 
 本项目的成立与完成离不开下述诸位的无私帮助,没有他们就没有COPT-MCP的诞生,在此表示衷心的感谢：
@@ -243,7 +244,7 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 ## 📞 联系我们
 
 - 个人邮箱: cjl3473383542@163.com
-- 学校邮箱: 2023110603@stu.sufe.edu.cn(两种邮箱均可)
+- 学校邮箱: 2023110603@stu.sufe.edu.cn (两种邮箱均可)
 - GitHub Issues: [提交问题](https://github.com/ChengJiale150/COPT-MCP/issues)
 
 ### 相关链接

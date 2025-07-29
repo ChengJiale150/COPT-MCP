@@ -240,7 +240,7 @@ Finally, thank you to everyone using COPT-MCP. If you have any questions or sugg
 ## 📞 Contact Us
 
 - Personal Email: cjl3473383542@163.com
-- School Email: 2023110603@stu.sufe.edu.cn (both email addresses are acceptable)
+- School Email: 2023110603@stu.sufe.edu.cn  (both email addresses are acceptable)
 - GitHub Issues: [Submit Issues](https://github.com/ChengJiale150/COPT-MCP/issues)
 
 ### Related Links
