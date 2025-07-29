@@ -1,10 +1,14 @@
 from fastmcp import FastMCP
-import os, struct, requests, sqlite3, sqlite_vec
-from typing import List
+import os, sqlite3, sqlite_vec, json
+from utils.env import Env
+from utils.embedding import get_embedding, contact_result
 
+env = Env()
 current_dir = os.path.dirname(os.path.abspath(__file__))
 resource_path = os.path.join(current_dir, "resource")
-api_key = "sk-wqdksytnrhdarewmhqtxkrribdztclmzukyorzxxnncqnlcz"
+with open(os.path.join(current_dir, "config.json"), "r", encoding="utf-8") as f:
+    config = json.load(f)
+
 
 mcp = FastMCP(name="COPT-MCP",  version="0.2.0",
               instructions='''这是由杉树科技研发的COPT的MCP服务，你可以使用这个服务来解决COPT的问题''',
@@ -75,47 +79,13 @@ def get_api_doc(instructions: str, language: str, domain: str,
             - "description": 查询API描述
             - "code": 查询API代码示例
         recall_num: 查询召回数量,默认为3,最大为10
-    """
-    def get_embedding(text: str, dim: int = 128) -> bytes:
-        def serialize_f32(vector: List[float]) -> bytes:
-            return struct.pack("%sf" % len(vector), *vector)
-        url = "https://api.siliconflow.cn/v1/embeddings"
-        
-        payload = {
-            "model": "Qwen/Qwen3-Embedding-4B",
-            "input": text,
-            "encoding_format": "float",
-            "dimensions": dim
-        }
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-
-        response = requests.post(url, json=payload, headers=headers)
-
-        return serialize_f32(response.json()["data"][0]["embedding"])
     
-    def contact_result(name: str, description: str, code: str) -> str:
-        return f'''
-### {name}
-
-#### 详细描述
-{description}
-
-#### 代码示例
-```
-{code}
-```
-
----
-'''
-
-    dim_map = {
-        "name": 64,
-        "description": 512,
-        "code": 512
-    }
+    Hints:
+        - 在希望精准查询特定API时，推荐使用"name"字段进行查询
+        - 在希望根据需求描述模糊查询时，推荐使用"description"字段进行查询
+        - 在希望根据代码片段模糊查询或者一次性召回多个API时，推荐使用"code"字段进行查询
+    """
+    dim_map = config["dim_map"]
 
     if language not in {"Python"}:
         return f"目前尚不支持语言为{language}"
@@ -138,14 +108,16 @@ def get_api_doc(instructions: str, language: str, domain: str,
             ORDER BY distance
             LIMIT {recall_num}
             """,
-            [get_embedding(instructions, dim_map[domain])],
+            [get_embedding(env, instructions, dim_map[domain])],
         ).fetchall()
         result_id = ",".join([str(rowid) for rowid, _ in rows])
-        result_recall = db.execute(f"SELECT name, description, code FROM api_doc WHERE rowid IN ({result_id})").fetchall()
-        result = ""
-        for name, description, code in result_recall:
-            result += contact_result(name, description, code)
-        return result
+        result_recall = db.execute(f"""
+                                   SELECT name, description, code 
+                                   FROM api_doc 
+                                   WHERE rowid IN ({result_id})
+                                   """).fetchall()
+        return "\n".join([contact_result(name, description, code) 
+                          for name, description, code in result_recall])
 
     except Exception as e:
         return f"发生错误: {e}"
@@ -153,4 +125,5 @@ def get_api_doc(instructions: str, language: str, domain: str,
         db.close()
 
 if __name__ == "__main__":
+    env.activate()
     mcp.run(transport="stdio")
