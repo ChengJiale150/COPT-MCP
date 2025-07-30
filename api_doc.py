@@ -3,14 +3,13 @@ import sqlite3, sqlite_vec, json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from utils.embedding import get_embedding
-from utils.env import Env
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 resource_path = os.path.join(current_dir, "resource", 'api_doc')
-env = Env()
 with open(os.path.join(current_dir, "config.json"), "r", encoding="utf-8") as f:
     config = json.load(f)
 dim_map = config["dim_map"]
+embedding_config = config["embedding"]
 
 def create_api_doc_table(db):
     db.execute(f"CREATE VIRTUAL TABLE name_vec USING vec0(embedding float[{dim_map['name']}])")
@@ -24,11 +23,11 @@ def insert_api_doc(db, item):
     
     with ThreadPoolExecutor(max_workers=3) as executor:
         if item["name"]:  # 只有非空时才获取embedding
-            embedding_tasks["name"] = executor.submit(get_embedding, env, item["name"], dim_map["name"])
+            embedding_tasks["name"] = executor.submit(get_embedding, embedding_config, item["name"], dim_map["name"])
         if item["description"]:
-            embedding_tasks["description"] = executor.submit(get_embedding, env, item["description"], dim_map["description"])
+            embedding_tasks["description"] = executor.submit(get_embedding, embedding_config, item["description"], dim_map["description"])
         if item["code"]:
-            embedding_tasks["code"] = executor.submit(get_embedding, env, item["code"], dim_map["code"])
+            embedding_tasks["code"] = executor.submit(get_embedding, embedding_config, item["code"], dim_map["code"])
         
         # 等待所有提交的embedding任务完成
         embeddings = {}
@@ -63,7 +62,6 @@ def insert_api_doc(db, item):
 
 if __name__ == "__main__":
     language = "Python"
-    env.activate()
     db = sqlite3.connect(f"{resource_path}/{language}/vector.db")
     db.enable_load_extension(True)
     sqlite_vec.load(db)

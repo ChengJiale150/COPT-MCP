@@ -1,7 +1,11 @@
 {
     "dim_map": {
-    "name": 512,
-    "description": 4096,
-    "code": 4096
+        "name": 512,
+        "description": 4096,
+        "code": 4096
+    },
+    "embedding": {
+        "url": "https://api.siliconflow.cn/v1/embeddings",
+        "api_key": "<your api key>"
     }
 }

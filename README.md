@@ -84,11 +84,13 @@ uv sync
 
 3. **配置环境变量**
 
-在.env文件中配置嵌入模型的EMB_URL和EMB_API_KEY,这里默认使用的是[硅基流动](https://cloud.siliconflow.cn/i/5JAHVbNN)的嵌入模型(Qwen3-Embedding-8B)
+在config.json文件中配置嵌入模型的EMB_URL和EMB_API_KEY,这里默认使用的是[硅基流动](https://cloud.siliconflow.cn/i/5JAHVbNN)的嵌入模型(Qwen3-Embedding-8B)
 
 ```
-EMB_URL=https://api.siliconflow.cn/v1/embeddings
-EMB_API_KEY=<your_api_key>
+"embedding": {
+    "url": "https://api.siliconflow.cn/v1/embeddings",
+    "api_key": "<your api key>"
+}
 ```
 
 4. **运行MCP服务**

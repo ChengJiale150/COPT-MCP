@@ -14,6 +14,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
+[![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 English | [中文](../README.md)
 
@@ -81,13 +82,15 @@ pip install uv
 uv sync
 ```
 
-3. **Configure environment variables**
+3. **Configure Embedding Model**
 
-Configure EMB_URL and EMB_API_KEY in the .env file. The default uses [Silicon Flow](https://cloud.siliconflow.cn/i/5JAHVbNN)'s embedding model (Qwen3-Embedding-8B)
+Configure the `url` and `api_key` for the embedding model in the `config.json` file. The default uses [Silicon Flow](https://cloud.siliconflow.cn/i/5JAHVbNN)'s embedding model (Qwen3-Embedding-8B).
 
-```
-EMB_URL=https://api.siliconflow.cn/v1/embeddings
-EMB_API_KEY=<your_api_key>
+```json
+"embedding": {
+    "url": "https://api.siliconflow.cn/v1/embeddings",
+    "api_key": "<your api key>"
+}
 ```
 
 4. **Run MCP service**

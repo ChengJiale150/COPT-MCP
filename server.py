@@ -1,9 +1,7 @@
 from fastmcp import FastMCP
 import os, sqlite3, sqlite_vec, json
-from utils.env import Env
 from utils.embedding import get_embedding, contact_result
 
-env = Env()
 current_dir = os.path.dirname(os.path.abspath(__file__))
 resource_path = os.path.join(current_dir, "resource")
 with open(os.path.join(current_dir, "config.json"), "r", encoding="utf-8") as f:
@@ -79,6 +77,7 @@ def get_api_doc(instructions: str, language: str, domain: str,
         recall_num: 查询召回数量,默认为3,最大为10
     
     Hints:
+        - 在能够明确API名称时，优先选择"name"字段
         - 在希望精准查询特定API时，推荐选择"name"字段
         - 在希望根据需求描述模糊查询时，推荐选择"description"字段
     """
@@ -105,7 +104,7 @@ def get_api_doc(instructions: str, language: str, domain: str,
             ORDER BY distance
             LIMIT {recall_num}
             """,
-            [get_embedding(env, instructions, dim_map[domain])],
+            [get_embedding(config["embedding"], instructions, dim_map[domain])],
         ).fetchall()
         result_id = ",".join([str(rowid) for rowid, _ in rows])
         result_recall = db.execute(f"""
@@ -122,5 +121,4 @@ def get_api_doc(instructions: str, language: str, domain: str,
         db.close()
 
 if __name__ == "__main__":
-    env.activate()
     mcp.run(transport="stdio")
