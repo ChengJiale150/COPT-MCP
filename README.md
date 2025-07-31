@@ -8,11 +8,11 @@
 
 *由 [ChengJiale150](https://github.com/ChengJiale150) 开发*
 
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 [English](./docs/README_EN.md) | 中文
 
@@ -37,7 +37,7 @@ COPT-MCP 是一个基于 [Model Context Protocol (MCP)](https://modelcontextprot
 
 ### 为什么需要COPT-MCP
 
-COPT求解器是一款针对大规模优化问题的高效数学规划求解器，支持线多种优化问题，是解决复杂运筹规划问题的不二之选。然而，COPT求解器的相关信息在公开场合较少，导致大模型在调用COPT求解器时，容易出现幻觉，影响使用体验。直接输入COPT的官方文档，也会因为文档过长，远超模型上下文长度上限，而且过多的无关文档内容也会影响模型理解，导致上下文迷失。
+COPT求解器是一款针对大规模优化问题的高效数学规划求解器，支持多种优化问题，是解决复杂运筹规划问题的不二之选。然而，COPT求解器的相关信息在公开场合较少，导致大模型在调用COPT求解器时，容易出现幻觉，影响使用体验。直接输入COPT的官方文档，也会因为文档过长，远超模型上下文长度上限，而且过多的无关文档内容也会影响模型理解，导致上下文迷失。
 
 COPT-MCP旨在为大模型提供COPT求解器的相关接口的最小可行文档与示例，通过精心组织与选取文档内容，实现COPT求解器的文档AI化适配，输出最小必要信息，降低模型幻觉，提高大模型使用COPT求解器相关接口的准确性。
 
@@ -56,7 +56,7 @@ COPT-MCP旨在为大模型提供COPT求解器的相关接口的最小可行文�
 |:----:|:-------------:|:----------------------:|
 | Tool | get_citation  | 获取COPT的引用格式            |
 | Tool | get_reference | 获取COPT的指定语言接口对应问题的参考示例 |
-| Tool | get_api_doc   | 根据查询指令召回最相似的API文档      |
+| Tool | get_api_doc   | 根据查询指令返回最相似的API文档      |
 
 ## 🛠️ 安装与使用
 
@@ -84,11 +84,15 @@ uv sync
 
 3. **配置环境变量**
 
-在config.json文件中配置嵌入模型的EMB_URL和EMB_API_KEY,这里默认使用的是[硅基流动](https://cloud.siliconflow.cn/i/5JAHVbNN)的嵌入模型(Qwen3-Embedding-8B)
+在config.json文件中配置模型的必要的API_KEY,这里默认使用的是[硅基流动](https://cloud.siliconflow.cn/i/5JAHVbNN)的相关模型
 
 ```
 "embedding": {
     "url": "https://api.siliconflow.cn/v1/embeddings",
+    "api_key": "<your api key>"
+},
+"reranker": {
+    "url": "https://api.siliconflow.cn/v1/rerank",
     "api_key": "<your api key>"
 }
 ```
@@ -178,7 +182,7 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 
 **工具名称**: `get_api_doc`
 
-**功能**: 根据查询指令召回最相似的API文档
+**功能**: 根据查询指令返回最相似的API文档信息
 
 **参数**:
 
@@ -190,16 +194,17 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 - `domain` (str): 查询指令对应的字段,目前支持的领域如下：
   - `"name"`: 查询API名称
   - `"description"`: 查询API描述
-- `recall_num` (int): 查询召回数量,默认为3,最大为10
+- `recall_num`(int): 查询召回数量,默认为10,最大为25
+- `return_num`(int): 重排序后最终返回数量,默认为3,最大为8
 
 **返回**: 包含API名称、描述、示例代码的Markdown格式文档
 
 **使用说明**:
 
 - 当大模型不清楚COPT求解器的相关API时，会优先调用`get_api_doc`工具，并传入`instructions`、`language`、`domain`和`recall_num`参数，获取对应API的文档。
-- 数据来源为COPT求解器的官方文档，通过嵌入模型召回最相似的API文档，并返回给大模型。
+- 数据来源为COPT求解器的官方文档，通过嵌入模型召回最相似的API文档，并经过重排序返回给大模型。
 - 数据存储在`resource/api_doc/{language}`文件夹中，分别存储为JSON格式(原始数据,用于用户查看)与db格式(用于模型查询)。
-- 由于API文档数量较多，目前尚不完善,已完成的API文档详见TODO.md,后续会持续更新,欢迎大家贡献更多API文档。
+- 由于API文档数量较多，目前尚不完善,已完成的API文档详见`resource/api_doc/{language}`文件夹中的TODO.md,后续会持续更新,欢迎大家贡献更多API文档。
 
 ## 🤝 贡献指南
 
@@ -224,11 +229,12 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 
 ### 最新信息
 
-- **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
+- **v0.2.0**(2025-07-31) 完善了Python的API接口的全部文档,`get_api_doc`添加了重排序功能
 
 ### 历史信息
 
 - **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
+- **v0.2.0**(2025-07-31) 完善了Python的API接口的全部文档,`get_api_doc`添加了重排序功能
 
 ## 🤗 致谢
 
@@ -239,7 +245,7 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 - [Claude Code](https://github.com/anthropics/claude-code): 感谢Claude Code, TA是我使用过的最强大的AI编程助手,没有TA就没有COPT-MCP的快速开发
 - [Cursor](https://www.cursor.com/): 感谢Cursor, TA才是本篇README的第一作者,没有TA就没有COPT-MCP文档的快速完成
 
-此外,还要感谢杉数COPT求解器交流2群(群号:142636109)的各位大佬,大家的讨论给了我很多启发,让我对COPT求解器有了更深入的理解,在此表示衷心的感谢。
+此外,还要感谢杉数COPT求解器交流2群(QQ群号:142636109)的各位大佬,大家的讨论给了我很多启发,让我对COPT求解器有了更深入的理解,在此表示衷心的感谢。
 
 最后,感谢各位使用COPT-MCP,如果有什么问题或者建议,欢迎随时联系我,我会尽快回复。
 

@@ -1,6 +1,6 @@
 from fastmcp import FastMCP
 import os, sqlite3, sqlite_vec, json
-from utils.embedding import get_embedding, contact_result
+from utils.embedding import get_embedding, contact_result, get_reranker
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 resource_path = os.path.join(current_dir, "resource")
@@ -61,9 +61,9 @@ def get_reference(problem_type: str, language: str) -> str:
 
 @mcp.tool()
 def get_api_doc(instructions: str, language: str, domain: str,
-                recall_num: int = 3) -> str:
+                recall_num: int = 10, return_num: int = 3) -> str:
     """
-    根据查询指令召回最相似的API文档,在你不清楚COPT的相关API用法时,可以调用此工具
+    根据查询指令召回并排序最相似的API文档,在你不清楚COPT的相关API用法时,可以调用此工具
     
     Args:
         instructions: 查询指令,支持自然语言描述与代码片段的查询,参考的查询指令如下：
@@ -74,7 +74,8 @@ def get_api_doc(instructions: str, language: str, domain: str,
         domain: 查询指令对应的字段,目前支持的领域如下：
             - "name": 查询API名称
             - "description": 查询API描述
-        recall_num: 查询召回数量,默认为3,最大为10
+        recall_num: 查询召回数量,默认为10,最大为25
+        return_num: 重排序后最终返回数量,默认为3,最大为8
     
     Hints:
         - 在能够明确API名称时，优先选择"name"字段
@@ -87,13 +88,17 @@ def get_api_doc(instructions: str, language: str, domain: str,
         return f"目前尚不支持语言为{language}"
     if domain not in dim_map:
         return f"目前尚不支持字段为{domain}"
-    if recall_num > 10 or recall_num < 1:
-        return "召回数量必须在1到10之间"
+    if recall_num > 25 or recall_num < 1:
+        return "召回数量必须在1到25之间"
+    if return_num > 8 or return_num < 1:
+        return "重排序后最终返回数量必须在1到8之间"
     
     try:
+        # 加载数据库
         db = sqlite3.connect(f"{resource_path}/api_doc/{language}/vector.db")
         db.enable_load_extension(True)
         sqlite_vec.load(db)
+        # 召回
         rows = db.execute(
             f"""
             SELECT
@@ -112,8 +117,15 @@ def get_api_doc(instructions: str, language: str, domain: str,
                                    FROM api_doc 
                                    WHERE rowid IN ({result_id})
                                    """).fetchall()
+        # 重排序
+        if domain == "description":
+            result_idx = get_reranker(config["reranker"], instructions, [description for _, description, _ in result_recall], return_num)
+        else:
+            result_idx = get_reranker(config["reranker"], instructions, [name for name, _, _ in result_recall], return_num)
+        reranker_result = [result_recall[idx] for idx in result_idx]
+        # 返回格式化后的结果
         return "\n".join([contact_result(name, description, code) 
-                          for name, description, code in result_recall])
+                          for name, description, code in reranker_result])
 
     except Exception as e:
         return f"发生错误: {e}"

@@ -14,7 +14,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 English | [中文](../README.md)
 
@@ -82,13 +82,17 @@ pip install uv
 uv sync
 ```
 
-3. **Configure Embedding Model**
+3. **Configure Environment Variables**
 
-Configure the `url` and `api_key` for the embedding model in the `config.json` file. The default uses [Silicon Flow](https://cloud.siliconflow.cn/i/5JAHVbNN)'s embedding model (Qwen3-Embedding-8B).
+Configure the necessary API_KEY for the model in the config.json file. The default uses the relevant models from [Silicon Flow](https://cloud.siliconflow.cn/i/5JAHVbNN).
 
-```json
+```
 "embedding": {
     "url": "https://api.siliconflow.cn/v1/embeddings",
+    "api_key": "<your api key>"
+},
+"reranker": {
+    "url": "https://api.siliconflow.cn/v1/rerank",
     "api_key": "<your api key>"
 }
 ```
@@ -188,16 +192,17 @@ COPT-MCP provides three core tools to help AI assistants better serve users with
 - `domain` (str): Field corresponding to query instructions, currently supported domains include:
   - `"name"`: Query API names
   - `"description"`: Query API descriptions
-- `recall_num` (int): Number of query recalls, default is 3, maximum is 10
+- `recall_num`(int): Number of recalled documents, default is 10, max is 25
+- `return_num`(int): Number of documents to return after reranking, default is 3, max is 8
 
 **Returns**: Markdown format document containing API names, descriptions, and example code
 
 **Usage Instructions**:
 
 - When large models are unclear about COPT solver-related APIs, they will first call the `get_api_doc` tool and pass `instructions`, `language`, `domain`, and `recall_num` parameters to get the corresponding API documentation.
-- Data source is the official COPT solver documentation, which retrieves the most similar API documentation through embedding models and returns it to the large model.
+- Data source is the official COPT solver documentation, which retrieves the most similar API documentation through embedding models and returns it to the large model after reranking.
 - Data is stored in the `resource/api_doc/{language}` folder, stored in JSON format (raw data for user viewing) and db format (for model queries).
-- Due to the large number of API documents, the current implementation is not yet complete. For completed API documentation, see TODO.md. It will be continuously updated, and everyone is welcome to contribute more API documentation.
+- Due to the large number of API documents, the current implementation is not yet complete. For completed API documentation, see TODO.md in the `resource/api_doc/{language}` folder. It will be continuously updated, and everyone is welcome to contribute more API documentation.
 
 ## 🤝 Contributing
 
@@ -221,11 +226,12 @@ We welcome community contributions! If you would like to contribute to the COPT-
 
 ### Latest Information
 
-- **v0.1.0** (2025-07-29) Initial version, completed rapid integration and usage of COPT-MCP
+- **v0.2.0**(2025-07-31) Completed all API documentation for the Python interface and added a reranking feature to `get_api_doc`.
 
 ### Historical Information
 
-- **v0.1.0** (2025-07-29) Initial version, completed rapid integration and usage of COPT-MCP
+- **v0.1.0**(2025-07-29) Initial version, completed rapid integration and usage of COPT-MCP.
+- **v0.2.0**(2025-07-31) Completed all API documentation for the Python interface and added a reranking feature to `get_api_doc`.
 
 ## 🤗 Acknowledgments
 
@@ -236,7 +242,7 @@ The establishment and completion of this project would not have been possible wi
 - [Claude Code](https://github.com/anthropics/claude-code): Thank you to Claude Code. TA is the most powerful AI programming assistant I have ever used. Without TA, there would be no rapid development of COPT-MCP.
 - [Cursor](https://www.cursor.com/): Thank you to Cursor. TA is actually the first author of this README. Without TA, there would be no rapid completion of COPT-MCP documentation.
 
-Additionally, I would like to thank all the experts in the Cardinal COPT Solver Discussion Group 2 (Group ID: 142636109). Your discussions have given me many insights and helped me gain a deeper understanding of the COPT solver. Here I express my sincere gratitude.
+Additionally, I would like to thank all the experts in the Cardinal COPT Solver Discussion Group 2 (QQ Group ID: 142636109). Your discussions have given me many insights and helped me gain a deeper understanding of the COPT solver. Here I express my sincere gratitude.
 
 Finally, thank you to everyone using COPT-MCP. If you have any questions or suggestions, please feel free to contact me, and I will respond as soon as possible.
 

@@ -37,24 +37,24 @@ def insert_api_doc(db, item):
     # 插入主表（包括空值）
     db.execute(
         "INSERT INTO api_doc(rowid, name, description, code) VALUES (?, ?, ?, ?)",
-        [item["rowid"], item["name"], item["description"], item["code"]]
+        [int(item["rowid"]), item["name"], item["description"], item["code"]]
     )
     
     # 只插入非空字段对应的embedding向量表
     if "name" in embeddings:
         db.execute(
             "INSERT INTO name_vec(rowid, embedding) VALUES (?, ?)",
-            [item["rowid"], embeddings["name"]]
+            [int(item["rowid"]), embeddings["name"]]
         )
     if "description" in embeddings:
         db.execute(
             "INSERT INTO description_vec(rowid, embedding) VALUES (?, ?)",
-            [item["rowid"], embeddings["description"]]
+            [int(item["rowid"]), embeddings["description"]]
         )
     if "code" in embeddings:
         db.execute(
             "INSERT INTO code_vec(rowid, embedding) VALUES (?, ?)",
-            [item["rowid"], embeddings["code"]]
+            [int(item["rowid"]), embeddings["code"]]
         )
     
     db.commit()
@@ -71,13 +71,15 @@ if __name__ == "__main__":
         print("表创建成功")
     else:
         print("表已存在")
-    
-    raw_data = json.load(open(f"{resource_path}/{language}/raw_data.json", "r", encoding="utf-8"))
-    
-    for item in tqdm(raw_data):
-        fetch = db.execute("SELECT * FROM api_doc WHERE rowid = ?", [item["rowid"]]).fetchone()
-        if fetch:
-            continue
-        insert_api_doc(db, item)
-    
-    db.close()
+    try:
+        raw_data = json.load(open(f"{resource_path}/{language}/raw_data.json", "r", encoding="utf-8"))
+        
+        for item in tqdm(raw_data):
+            fetch = db.execute("SELECT rowid FROM api_doc WHERE rowid = ?", [int(item["rowid"])]).fetchone()
+            if fetch:
+                continue
+            insert_api_doc(db, item)
+    except Exception as e:
+        print(e)
+    finally:    
+        db.close()

@@ -7,5 +7,10 @@
     "embedding": {
         "url": "https://api.siliconflow.cn/v1/embeddings",
         "api_key": "<your api key>"
+    },
+    "reranker": {
+        "url": "https://api.siliconflow.cn/v1/rerank",
+        "api_key": "<your api key>",
+        "model": "Qwen/Qwen3-Reranker-8B"
     }
 }
