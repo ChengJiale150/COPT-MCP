@@ -12,7 +12,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.3.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.3.1-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 [English](./international/README_EN.md) | 中文
 
@@ -229,9 +229,11 @@ COPT-MCP提供三个核心工具，帮助AI助手更好地为用户提供优化�
 
 ## 📝 更新日志
 
+下述日志仅记录版本大更新记录的概要,具体信息详见[更新日志](./docs/update_info.md)
+
 ### 最新信息
 
-- **v0.3.0**(2025-08-04) 修改文档结构，添加详细的MCP安装支持，更新README和国际化文档，优化代码以支持环境变量中的API密钥
+- **v0.3.0**(2025-08-04) 修改文档结构，添加详细的MCP安装支持
 
 ### 历史信息
 
