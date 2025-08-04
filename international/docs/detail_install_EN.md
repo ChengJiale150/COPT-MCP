@@ -30,7 +30,35 @@ First, we need to confirm the file path of the MCP server entry file `server.py`
 
 ### Windows 11
 
-...
+In `File Explorer`, find the `server.py` file in the COPT-MCP folder and press the shortcut `ctrl+shift+C` to copy the file path. A reference path is as follows:
+
+```bash
+C:\Users\username\Desktop\MCP\COPT-MCP\server.py
+```
+
+At this point, you need to replace the `\` in the path with `\\`. The final path is as follows:
+
+```bash
+C:\\Users\\username\\Desktop\\MCP\\COPT-MCP\\server.py
+```
+
+Finally, replace the file path in the reference JSON format with the copied path. An example is as follows:
+
+```json
+"COPT-MCP": {
+    "command": "uv",
+    "args": [
+        "run",
+        "--with", "fastmcp",
+        "--with", "requests",
+        "--with", "sqlite_vec",
+        "fastmcp", "run",
+        "C:\\Users\\username\\Desktop\\MCP\\COPT-MCP\\server.py"
+    ],
+    "env": {},
+    "transport": "stdio"
+}
+```
 
 ### MacOS
 

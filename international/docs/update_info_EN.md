@@ -1,6 +1,6 @@
 # Latest Records
 
-- **v0.3.2** (2025-08-04) Added Cline installation configuration guide.
+- **v0.3.3** (2025-08-04) Added Windows system installation configuration guide.
 
 # Historical Records
 
@@ -9,3 +9,4 @@
 - **v0.3.0** (2025-08-04) Modified the documentation structure and added detailed MCP installation support.
   - **v0.3.1** (2025-08-04) Added Cherry Studio and Trae installation configuration guides.
   - **v0.3.2** (2025-08-04) Added Cline installation configuration guide.
+  - **v0.3.3** (2025-08-04) Added Windows system installation configuration guide.

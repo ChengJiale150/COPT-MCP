@@ -30,7 +30,35 @@
 
 ### Windows 11
 
-...
+在`文件资源管理器`中找到COPT-MCP对应的文件夹中的`server.py`文件,按下快捷键`ctrl+shift+C`复制文件路径,参考的路径如下:
+
+```bash
+C:\Users\username\Desktop\MCP\COPT-MCP\server.py
+```
+
+此时,需要注意将路径中的`\`替换为`\\`,最终的路径如下:
+
+```bash
+C:\\Users\\username\\Desktop\\MCP\\COPT-MCP\\server.py
+```
+
+最后将上述参考JSON格式中的文件路径替换为复制完毕的路径,示例如下:
+
+```json
+"COPT-MCP": {
+    "command": "uv",
+    "args": [
+    "run",
+    "--with", "fastmcp",
+    "--with", "requests",
+    "--with", "sqlite_vec",
+    "fastmcp", "run", 
+    "C:\\Users\\username\\Desktop\\MCP\\COPT-MCP\\server.py"
+    ],
+    "env": {},
+    "transport": "stdio"
+}
+```
 
 ### MacOS
 
@@ -137,7 +165,7 @@
 
 ### Cline
 
-在对话底部打开`Manager MCP Servers`(📚),点击设置按钮(⚙图标),选择`Installed`,点击`Configure MCP Servers`就会跳转到`cline_mcp_settings.json`文件,呈现的示例结果如下:
+在对话底部打开`Manager MCP Servers`,点击设置按钮(⚙图标),选择`Installed`,点击`Configure MCP Servers`就会跳转到`cline_mcp_settings.json`文件,呈现的示例结果如下:
 
 ```json
 {

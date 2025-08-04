@@ -14,7 +14,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.3.2-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.3.3-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 English | [中文](./../README.md)
 
