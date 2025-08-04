@@ -135,6 +135,33 @@
 
 点击确认,打开对应的MCP服务器,查看是否连接成功
 
+### Cline
+
+在对话底部打开`Manager MCP Servers`(📚),点击设置按钮(⚙图标),选择`Installed`,点击`Configure MCP Servers`就会跳转到`cline_mcp_settings.json`文件,呈现的示例结果如下:
+
+```json
+{
+  "mcpServers": {
+    ...(已有的MCP,若没有则为空)
+  }
+}
+```
+
+在已有的MCP后添加`,`(英文半角符号)(若无则无需添加),将之前已经填充完善好的JSON文件黏贴之后,最终的参考结果如下:
+
+```json
+{
+  "mcpServers": {
+    ...(已有的MCP,若没有则为空),
+    "COPT-MCP" : {
+        ...(上述具体内容)
+    }
+  }
+}
+```
+
+最后保存并关闭`cline_mcp_settings.json`文件,返回查看是否出现名为`COPT-MCP`的MCP服务,启动并等待片刻,如果变绿灯则表明MCP服务启动成功
+
 ## Step4: 测试MCP工具是否正常运行
 
 接下来使用客户端支持MCP工具调用的模式(如Cursor中的Agent模式)测试MCP工具是否正常运行

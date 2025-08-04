@@ -1,6 +1,6 @@
 [project]
 name = "copt-mcp"
-version = "0.3.1"
+version = "0.3.2"
 description = "COPT的MCP服务"
 readme = "README.md"
 requires-python = ">=3.12"
