@@ -12,9 +12,9 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.2.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.3.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
-[English](./docs/README_EN.md) | 中文
+[English](./international/README_EN.md) | 中文
 
 </div>
 
@@ -116,7 +116,7 @@ fastmcp install cursor server.py
 ```json
 {
   "mcpServers": {
-    "copt-mcp": {
+    "COPT-MCP": {
       "command": "uv",
       "args": [
         "run",
@@ -133,9 +133,11 @@ fastmcp install cursor server.py
 }
 ```
 
+其他配置详见[详细配置指引](./docs/detail_install.md)
+
 ## 🔧 详细介绍
 
-COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化求解服务。
+COPT-MCP提供三个核心工具，帮助AI助手更好地为用户提供优化求解服务。
 
 ### 获取引用格式
 
@@ -229,12 +231,13 @@ COPT-MCP提供两个核心工具，帮助AI助手更好地为用户提供优化�
 
 ### 最新信息
 
-- **v0.2.0**(2025-07-31) 完善了Python的API接口的全部文档,`get_api_doc`添加了重排序功能
+- **v0.3.0**(2025-08-04) 修改文档结构，添加详细的MCP安装支持，更新README和国际化文档，优化代码以支持环境变量中的API密钥
 
 ### 历史信息
 
 - **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
 - **v0.2.0**(2025-07-31) 完善了Python的API接口的全部文档,`get_api_doc`添加了重排序功能
+- **v0.3.0**(2025-08-04) 修改了文档结构,添加了详尽的MCP安装支持
 
 ## 🤗 致谢
 

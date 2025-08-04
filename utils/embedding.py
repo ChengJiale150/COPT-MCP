@@ -1,5 +1,6 @@
 from typing import List, Dict, Any
 import struct, requests
+import os
 
 def get_embedding(embedding_config: Dict[str, Any], text: str, dim: int = 128) -> bytes:
     """
@@ -12,7 +13,10 @@ def get_embedding(embedding_config: Dict[str, Any], text: str, dim: int = 128) -
         return struct.pack("%sf" % len(vector), *vector)
     
     url = embedding_config.get("url")
-    api_key = embedding_config.get("api_key")
+    if os.environ.get("API_KEY"):
+        api_key = os.environ.get("API_KEY")
+    else:
+        api_key = embedding_config.get("api_key")
     
     # 检查必要的配置是否存在
     if not url:
@@ -60,7 +64,10 @@ def get_reranker(reranker_config: Dict[str, Any], query: str, documents: List[st
     获取文本的重排序结果
     """
     url = reranker_config.get("url")
-    api_key = reranker_config.get("api_key")
+    if os.environ.get("API_KEY"):
+        api_key = os.environ.get("API_KEY")
+    else:
+        api_key = reranker_config.get("api_key")
     model = reranker_config.get("model")
 
     if not url:
