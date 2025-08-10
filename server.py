@@ -1,6 +1,8 @@
 from fastmcp import FastMCP
 import os, sqlite3, sqlite_vec, json
 from utils.embedding import get_embedding, contact_result, get_reranker
+from typing import Annotated
+from pydantic import Field
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 resource_path = os.path.join(current_dir, "resource")
@@ -17,7 +19,9 @@ mcp = FastMCP(name="COPT-MCP",  version="0.2.0",
               ])
 
 @mcp.tool()
-def get_citation(citation_type: str) -> str:
+def get_citation(
+    citation_type: Annotated[str, Field(description="引用类型")]
+    ) -> str:
     """
     获取COPT的引用格式
     
@@ -35,7 +39,10 @@ def get_citation(citation_type: str) -> str:
         return "文件不存在"
 
 @mcp.tool()
-def get_reference(problem_type: str, language: str) -> str:
+def get_reference(
+    problem_type: Annotated[str, Field(description="求解问题类型")],
+    language: Annotated[str, Field(description="API接口语言")]
+    ) -> str:
     """
     获取COPT的指定语言接口对应问题的参考示例,推荐在调用COPT解决对应问题前调用
     
@@ -44,11 +51,12 @@ def get_reference(problem_type: str, language: str) -> str:
             - "LP": 线性规划(LP)
             - "MIP": 混合整数规划(MIP)
             - "SOCP": 二阶锥规划(SOCP)
+            - "NLP": 非线性规划(NLP)
         language: API接口语言，目前支持的语言如下：
             - "Python": Python接口
     """
 
-    if problem_type not in {"LP", "MIP", "SOCP"}:
+    if problem_type not in {"LP", "MIP", "SOCP", "NLP"}:
         return f"目前尚不支持问题类型为{problem_type}"
     
     if language not in {"Python"}:
@@ -60,8 +68,13 @@ def get_reference(problem_type: str, language: str) -> str:
         return "文件不存在"
 
 @mcp.tool()
-def get_api_doc(instructions: str, language: str, domain: str,
-                recall_num: int = 10, return_num: int = 3) -> str:
+def get_api_doc(
+    instructions: Annotated[str, Field(description="查询指令,支持自然语言描述与代码片段的查询")],
+    language: Annotated[str, Field(description="API接口语言")],
+    domain: Annotated[str, Field(description="查询指令对应的字段")],
+    recall_num: Annotated[int, Field(description="查询召回数量", ge=1, le=25)],
+    return_num: Annotated[int, Field(description="重排序后最终返回数量", ge=1, le=8)]
+    ) -> str:
     """
     根据查询指令召回并排序最相似的API文档,在你不清楚COPT的相关API用法时,可以调用此工具
     

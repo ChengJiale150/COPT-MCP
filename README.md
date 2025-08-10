@@ -12,7 +12,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.3.3-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.4.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 [English](./international/README_EN.md) | 中文
 
@@ -170,6 +170,7 @@ COPT-MCP提供三个核心工具，帮助AI助手更好地为用户提供优化�
   - `"LP"`: 线性规划 (Linear Programming)
   - `"MIP"`: 混合整数规划 (Mixed Integer Programming)
   - `"SOCP"`: 二阶锥规划 (Second-Order Cone Programming)
+  - `"NLP"`: 非线性规划 (Nonlinear Programming)
 - `language` (str): API接口语言(目前仅支持以下类型)
   - `"Python"`: Python接口
 
@@ -233,13 +234,14 @@ COPT-MCP提供三个核心工具，帮助AI助手更好地为用户提供优化�
 
 ### 最新信息
 
-- **v0.3.0**(2025-08-04) 修改文档结构，添加详细的MCP安装支持
+- **v0.4.0**(2025-08-10) 添加非线性规划(NLP)的参考示例,完善了MCP类型注释
 
 ### 历史信息
 
 - **v0.1.0**(2025-07-29) 初始版本,完成COPT-MCP的快速集成与使用
 - **v0.2.0**(2025-07-31) 完善了Python的API接口的全部文档,`get_api_doc`添加了重排序功能
 - **v0.3.0**(2025-08-04) 修改了文档结构,添加了详尽的MCP安装支持
+- **v0.4.0**(2025-08-10) 添加非线性规划(NLP)的参考示例,完善了MCP类型注释
 
 ## 🤗 致谢
 

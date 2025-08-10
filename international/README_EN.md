@@ -14,7 +14,7 @@
 [![COPT](https://img.shields.io/badge/COPT-7.2.9+-green.svg)](https://www.cardopt.com/solver)
 [![FastMCP](https://img.shields.io/badge/FastMCP-2.10.6+-orange.svg)](https://github.com/jlowin/fastmcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
-[![Version](https://img.shields.io/badge/version-v0.3.3-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
+[![Version](https://img.shields.io/badge/version-v0.4.0-blue.svg)](https://github.com/ChengJiale150/COPT-MCP)
 
 English | [中文](./../README.md)
 
@@ -172,6 +172,7 @@ COPT-MCP provides three core tools to help AI assistants better provide optimiza
     -   `"LP"`: Linear Programming
     -   `"MIP"`: Mixed Integer Programming
     -   `"SOCP"`: Second-Order Cone Programming
+    -   `"NLP"`: Nonlinear Programming
 -   `language` (str): API interface language (currently only the following types are supported)
     -   `"Python"`: Python interface
 
@@ -235,13 +236,14 @@ The following log only records a summary of major version updates. For details, 
 
 ### Latest Information
 
--   **v0.3.0** (2025-08-04) Modified the documentation structure and added detailed MCP installation support.
+-   **v0.4.0** (2025-08-10) Added reference examples for nonlinear programming (NLP), and improved MCP type annotations.
 
 ### Historical Information
 
 -   **v0.1.0** (2025-07-29) Initial version, completed the rapid integration and use of COPT-MCP.
 -   **v0.2.0** (2025-07-31) Completed all documentation for the Python API interface, and added a re-ranking function to `get_api_doc`.
 -   **v0.3.0** (2025-08-04) Modified the documentation structure and added detailed MCP installation support.
+-   **v0.4.0** (2025-08-10) Added reference examples for nonlinear programming (NLP), and improved MCP type annotations.
 
 ## 🤗 Acknowledgments
 

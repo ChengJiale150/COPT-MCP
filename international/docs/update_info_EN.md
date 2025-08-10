@@ -1,6 +1,6 @@
 # Latest Records
 
-- **v0.3.3** (2025-08-04) Added Windows system installation configuration guide.
+- **v0.4.0** (2025-08-10) Added reference examples for nonlinear programming (NLP), and improved MCP type annotations.
 
 # Historical Records
 
@@ -10,3 +10,4 @@
   - **v0.3.1** (2025-08-04) Added Cherry Studio and Trae installation configuration guides.
   - **v0.3.2** (2025-08-04) Added Cline installation configuration guide.
   - **v0.3.3** (2025-08-04) Added Windows system installation configuration guide.
+- **v0.4.0** (2025-08-10) Added reference examples for nonlinear programming (NLP), and improved MCP type annotations.
